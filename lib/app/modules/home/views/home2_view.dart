@@ -92,9 +92,12 @@ class Home2View extends GetView<HomeController> {
                             }).toList(),
                           ),
                           Positioned(
-                            bottom: 10,
+                            bottom: 02,
+                            left: Get.width / 2 -
+                                (controller.slider.length * 12) / 2,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: controller.slider.map((Slide slide) {
                                 return Container(
                                   width: 8.0,
@@ -107,6 +110,7 @@ class Home2View extends GetView<HomeController> {
                                               controller.slider.indexOf(slide)
                                           ? slide.indicatorColor
                                           : slide.indicatorColor
+                                              // ignore: deprecated_member_use
                                               .withOpacity(0.3)),
                                 );
                               }).toList(),

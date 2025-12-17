@@ -48,10 +48,10 @@ class SlideItemWidget extends StatelessWidget {
         Container(
             alignment: Ui.getAlignmentDirectional(slide.textPosition),
             width: double.infinity,
-            height: 240,
+            height: 180,
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
-              width: Get.width / 2.5,
+              width: Get.width / 3,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
