@@ -77,11 +77,12 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                 width: widget.currentIndex == index
                     ? MediaQuery.of(context).size.width /
                             widget.children.length +
-                        20
+                        8
                     : 60,
                 // padding:
                 //     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                margin: const EdgeInsets.only(top: 8, bottom: 8),
+                margin:
+                    const EdgeInsets.only(top: 8, bottom: 8, left: 4, right: 4),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     color: widget.currentIndex == index
