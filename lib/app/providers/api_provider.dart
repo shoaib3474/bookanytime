@@ -1,0 +1,83 @@
+/*
+ * File name: api_provider.dart
+ * Updated: 2025
+ */
+
+import 'package:dio/dio.dart' as dio;
+import 'package:flutter/foundation.dart' as foundation;
+import 'package:get/get.dart';
+
+import '../../common/custom_trace.dart';
+import '../services/auth_service.dart';
+import '../services/global_service.dart';
+import 'dio_client.dart';
+
+mixin ApiClient {
+  final GlobalService globalService = Get.find<GlobalService>();
+  final AuthService authService = Get.find<AuthService>();
+
+  String baseUrl = '';
+
+  late DioClient _httpClient;
+  late dio.Options _optionsNetwork;
+  late dio.Options _optionsCache;
+
+  DioClient get httpClient => _httpClient;
+  dio.Options get optionsNetwork => _optionsNetwork;
+  dio.Options get optionsCache => _optionsCache;
+
+  Future<ApiClient> init() async {
+    _httpClient = DioClient(baseUrl, dio.Dio());
+
+    _optionsNetwork = _httpClient.optionsNetwork;
+    _optionsCache = _httpClient.optionsCache;
+
+    return this;
+  }
+
+  bool isLoading({String? task, List<String>? tasks}) {
+    return _httpClient.isLoading(task: task, tasks: tasks);
+  }
+
+
+  void setLocale(String locale) {
+    _optionsNetwork.headers?['Accept-Language'] = locale;
+    _optionsCache.headers?['Accept-Language'] = locale;
+  }
+
+  void forceRefresh() {
+    if (!foundation.kIsWeb && !foundation.kDebugMode) {
+      _optionsCache = dio.Options(
+        headers: _optionsCache.headers,
+        extra: {'useCache': false},
+      );
+    }
+  }
+
+  void unForceRefresh() {
+    if (!foundation.kIsWeb && !foundation.kDebugMode) {
+      _optionsCache = dio.Options(
+        headers: _optionsCache.headers,
+        extra: {'useCache': true},
+      );
+    }
+  }
+
+  String getBaseUrl(String path) {
+    if (!path.endsWith('/')) path += '/';
+    if (path.startsWith('/')) path = path.substring(1);
+    return baseUrl.endsWith('/') ? baseUrl + path : '$baseUrl/$path';
+  }
+
+  String getApiBaseUrl(String path) {
+    final apiPath = globalService.global.value.apiPath ?? '';
+    return getBaseUrl(apiPath) + path;
+  }
+
+  Uri getApiBaseUri(String path) => Uri.parse(getApiBaseUrl(path));
+  Uri getBaseUri(String path) => Uri.parse(getBaseUrl(path));
+
+  void printUri(StackTrace stackTrace, Uri uri) {
+    Get.log(CustomTrace(stackTrace, message: uri.toString()).toString());
+  }
+}
