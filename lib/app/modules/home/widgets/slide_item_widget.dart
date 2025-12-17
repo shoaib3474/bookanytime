@@ -20,8 +20,8 @@ class SlideItemWidget extends StatelessWidget {
 
   const SlideItemWidget({
     required this.slide,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,8 @@ class SlideItemWidget extends StatelessWidget {
       children: [
         Transform(
           alignment: Alignment.center,
-          transform: Matrix4.rotationY(Directionality.of(context) == TextDirection.rtl ? math.pi : 0),
+          transform: Matrix4.rotationY(
+              Directionality.of(context) == TextDirection.rtl ? math.pi : 0),
           child: CachedNetworkImage(
             width: double.infinity,
             height: 310,
@@ -40,46 +41,65 @@ class SlideItemWidget extends StatelessWidget {
               fit: BoxFit.cover,
               width: double.infinity,
             ),
-            errorWidget: (context, url, error) => Icon(Icons.error_outline),
+            errorWidget: (context, url, error) =>
+                const Icon(Icons.error_outline),
           ),
         ),
         Container(
             alignment: Ui.getAlignmentDirectional(slide.textPosition),
             width: double.infinity,
-            padding: EdgeInsets.symmetric(vertical: 85, horizontal: 20),
+            height: 240,
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: SizedBox(
               width: Get.width / 2.5,
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment:
+                    Ui.getCrossAxisAlignment(slide.textPosition),
                 children: [
                   if (slide.text != '')
-                    Text(
-                      slide.text,
-                      style: Get.textTheme.bodyMedium!.merge(TextStyle(color: slide.textColor)),
-                      overflow: TextOverflow.fade,
-                      maxLines: 3,
+                    Flexible(
+                      child: Text(
+                        slide.text,
+                        style: Get.textTheme.bodyMedium!
+                            .merge(TextStyle(color: slide.textColor)),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
                     ),
+                  if (slide.text != '') const SizedBox(height: 8),
                   if (slide.button != '')
                     MaterialButton(
                       onPressed: () {
                         if (slide.salon.hasData) {
-                          Get.toNamed(Routes.SALON, arguments: {'salon': slide.salon, 'heroTag': 'salon_slide_item'});
+                          Get.toNamed(Routes.SALON, arguments: {
+                            'salon': slide.salon,
+                            'heroTag': 'salon_slide_item'
+                          });
                         } else if (slide.eService.hasData) {
-                          Get.toNamed(Routes.E_SERVICE, arguments: {'eService': slide.eService, 'heroTag': 'slide_item'});
+                          Get.toNamed(Routes.E_SERVICE, arguments: {
+                            'eService': slide.eService,
+                            'heroTag': 'slide_item'
+                          });
                         }
                       },
-                      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 16),
                       color: slide.buttonColor,
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
+                      elevation: 0,
                       child: Text(
                         slide.button,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(color: Get.theme.primaryColor),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Get.theme.primaryColor,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
-                      elevation: 0,
                     ),
                 ],
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: Ui.getCrossAxisAlignment(slide.textPosition),
               ),
             )),
       ],

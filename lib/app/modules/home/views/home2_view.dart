@@ -24,6 +24,8 @@ import '../widgets/recommended_carousel_widget.dart';
 import '../widgets/slide_item_widget.dart';
 
 class Home2View extends GetView<HomeController> {
+  const Home2View({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,110 +41,141 @@ class Home2View extends GetView<HomeController> {
             slivers: <Widget>[
               SliverAppBar(
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                expandedHeight: 300,
-                elevation: 0.5,
+                expandedHeight: 240,
+                elevation: 0,
                 floating: true,
+                pinned: true,
                 iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-                title: Text(
-                  Get.find<SettingsService>().setting.value.appName ?? "",
-                  style: Get.textTheme.titleLarge,
-                ),
-                centerTitle: true,
                 automaticallyImplyLeading: false,
-                leading: new IconButton(
-                  icon: new Icon(Icons.sort, color: Colors.black87),
+                leading: IconButton(
+                  icon: Icon(Icons.menu, color: Get.theme.hintColor),
                   onPressed: () => {Scaffold.of(context).openDrawer()},
                 ),
-                actions: [NotificationsButtonWidget()],
+                title: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    Get.find<SettingsService>().setting.value.appName ?? "",
+                    style: Get.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                centerTitle: false,
+                actions: const [NotificationsButtonWidget()],
                 bottom: HomeSearchBarWidget(),
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.parallax,
                   background: Obx(() {
-                    return Stack(
-                      alignment: controller.slider.isEmpty
-                          ? AlignmentDirectional.center
-                          : Ui.getAlignmentDirectional(controller.slider.elementAt(controller.currentSlide.value).textPosition),
-                      children: <Widget>[
-                        CarouselSlider(
-                          options: CarouselOptions(
-                            autoPlay: true,
-                            autoPlayInterval: Duration(seconds: 7),
-                            height: 360,
-                            viewportFraction: 1.0,
-                            onPageChanged: (index, reason) {
-                              controller.currentSlide.value = index;
-                            },
-                          ),
-                          items: controller.slider.map((Slide slide) {
-                            return SlideItemWidget(slide: slide);
-                          }).toList(),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 70, horizontal: 20),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: controller.slider.map((Slide slide) {
-                              return Container(
-                                width: 20.0,
-                                height: 5.0,
-                                margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    color: controller.currentSlide.value == controller.slider.indexOf(slide)
-                                        ? slide.indicatorColor
-                                        : slide.indicatorColor.withOpacity(0.4)),
-                              );
+                    return Container(
+                      color: Theme.of(context).scaffoldBackgroundColor,
+                      child: Stack(
+                        alignment: controller.slider.isEmpty
+                            ? AlignmentDirectional.center
+                            : Ui.getAlignmentDirectional(controller.slider
+                                .elementAt(controller.currentSlide.value)
+                                .textPosition),
+                        children: <Widget>[
+                          CarouselSlider(
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              autoPlayInterval: const Duration(seconds: 7),
+                              height: 240,
+                              viewportFraction: 0.95,
+                              padEnds: true,
+                              enlargeCenterPage: true,
+                              onPageChanged: (index, reason) {
+                                controller.currentSlide.value = index;
+                              },
+                            ),
+                            items: controller.slider.map((Slide slide) {
+                              return SlideItemWidget(slide: slide);
                             }).toList(),
                           ),
-                        ),
-                      ],
+                          Positioned(
+                            bottom: 10,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: controller.slider.map((Slide slide) {
+                                return Container(
+                                  width: 8.0,
+                                  height: 8.0,
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 3.0),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: controller.currentSlide.value ==
+                                              controller.slider.indexOf(slide)
+                                          ? slide.indicatorColor
+                                          : slide.indicatorColor
+                                              .withOpacity(0.3)),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        ],
+                      ),
                     );
                   }),
-                ).marginOnly(bottom: 42),
+                ).marginOnly(bottom: 0),
               ),
               SliverToBoxAdapter(
-                child: Wrap(
+                child: Column(
                   children: [
-                    AddressWidget(),
+                    AddressWidget().paddingAll(15),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                      color: Get.theme.colorScheme.secondary.withOpacity(0.05),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       child: Row(
                         children: [
-                          Expanded(child: Text("Recommended for you".tr, style: Get.textTheme.headlineSmall)),
-                          MaterialButton(
-                            onPressed: () {
+                          Expanded(
+                              child: Text("Recommended for you".tr,
+                                  style: Get.textTheme.headlineSmall
+                                      ?.copyWith(fontWeight: FontWeight.w600))),
+                          GestureDetector(
+                            onTap: () {
                               Get.toNamed(Routes.MAPS);
                             },
-                            shape: StadiumBorder(),
-                            color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.titleMedium),
-                            elevation: 0,
+                            child: Text(
+                              "See All".tr,
+                              style: Get.textTheme.bodySmall?.copyWith(
+                                color: Get.theme.colorScheme.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                     RecommendedCarouselWidget(),
+                    const SizedBox(height: 10),
                     Container(
-                      color: Get.theme.primaryColor,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                      color: Get.theme.colorScheme.secondary.withOpacity(0.05),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 12),
                       child: Row(
                         children: [
-                          Expanded(child: Text("Categories".tr, style: Get.textTheme.headlineSmall)),
-                          MaterialButton(
-                            onPressed: () {
+                          Expanded(
+                              child: Text("Categories".tr,
+                                  style: Get.textTheme.headlineSmall
+                                      ?.copyWith(fontWeight: FontWeight.w600))),
+                          GestureDetector(
+                            onTap: () {
                               Get.toNamed(Routes.CATEGORIES);
                             },
-                            shape: StadiumBorder(),
-                            color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.titleMedium),
-                            elevation: 0,
+                            child: Text(
+                              "See All".tr,
+                              style: Get.textTheme.bodySmall?.copyWith(
+                                color: Get.theme.colorScheme.secondary,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     ),
                     CategoriesCarouselWidget(),
+                    const SizedBox(height: 10),
                     FeaturedCategoriesWidget(),
                   ],
                 ),
