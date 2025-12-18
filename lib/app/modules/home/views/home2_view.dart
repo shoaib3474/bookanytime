@@ -123,65 +123,77 @@ class Home2View extends GetView<HomeController> {
                 ).marginOnly(bottom: 0),
               ),
               SliverToBoxAdapter(
-                child: Column(
-                  children: [
-                    AddressWidget().paddingAll(15),
-                    Container(
-                      color: Get.theme.colorScheme.secondary.withOpacity(0.05),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Text("Recommended for you".tr,
-                                  style: Get.textTheme.headlineSmall
-                                      ?.copyWith(fontWeight: FontWeight.w600))),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.MAPS);
-                            },
-                            child: Text(
-                              "See All".tr,
-                              style: Get.textTheme.bodySmall?.copyWith(
-                                color: Get.theme.colorScheme.secondary,
-                                fontWeight: FontWeight.w600,
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Categories".tr,
+                                style: Get.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Get.theme.hintColor,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RecommendedCarouselWidget(),
-                    const SizedBox(height: 10),
-                    Container(
-                      color: Get.theme.colorScheme.secondary.withOpacity(0.05),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 12),
-                      child: Row(
-                        children: [
-                          Expanded(
-                              child: Text("Categories".tr,
-                                  style: Get.textTheme.headlineSmall
-                                      ?.copyWith(fontWeight: FontWeight.w600))),
-                          GestureDetector(
-                            onTap: () {
-                              Get.toNamed(Routes.CATEGORIES);
-                            },
-                            child: Text(
-                              "See All".tr,
-                              style: Get.textTheme.bodySmall?.copyWith(
-                                color: Get.theme.colorScheme.secondary,
-                                fontWeight: FontWeight.w600,
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.CATEGORIES);
+                              },
+                              child: Text(
+                                "See All".tr,
+                                style: Get.textTheme.bodySmall?.copyWith(
+                                  color: Get.theme.colorScheme.secondary,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    CategoriesCarouselWidget(),
-                    const SizedBox(height: 10),
-                    FeaturedCategoriesWidget(),
-                  ],
+                      CategoriesCarouselWidget(),
+                      const SizedBox(height: 16),
+                      AddressWidget().paddingSymmetric(horizontal: 16),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Featured for you".tr,
+                                style: Get.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Get.theme.hintColor,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.MAPS);
+                              },
+                              child: Text(
+                                "See All".tr,
+                                style: Get.textTheme.bodySmall?.copyWith(
+                                  color: Get.theme.colorScheme.secondary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      RecommendedCarouselWidget(),
+                      const SizedBox(height: 20),
+                      FeaturedCategoriesWidget(),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
             ],
