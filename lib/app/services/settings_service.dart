@@ -37,14 +37,14 @@ class SettingsService extends GetxService {
   }
 
   void _applyDefaultColorSchemeIfMissing() {
-    // Barberaa-like palette (adjustable):
-    // - mainColor: warm yellow/gold for highlights and selected pill
-    // - secondColor: dark navy/charcoal for text/icons
-    // - accentColor: slightly transparent variant used for dividers/background tints
+    // Modern vibrant palette:
+    // - mainColor: Purple/Magenta (D822F0) for primary actions and highlights
+    // - secondColor: Yellow (F2F22A) for secondary accents and text
+    // - accentColor: Complementary shade for dividers/backgrounds
     // These defaults only apply when the server doesn't provide values.
-    const defaultMain = '#F7C948'; // warm yellow/gold
-    const defaultSecond = '#12263A'; // dark navy
-    const defaultAccent = '#F7C948';
+    const defaultMain = '#D822F0'; // vibrant purple
+    const defaultSecond = '#F2F22A'; // bright yellow
+    const defaultAccent = '#D822F0';
     const defaultScaffold = '#FFFFFF';
 
     if (setting.value.mainColor == null || setting.value.mainColor!.isEmpty) {
@@ -65,41 +65,46 @@ class SettingsService extends GetxService {
     // dark theme fallbacks
     if (setting.value.mainDarkColor == null ||
         setting.value.mainDarkColor!.isEmpty) {
-      setting.value.mainDarkColor = defaultMain;
+      setting.value.mainDarkColor = '#C017D1'; // darker purple for dark theme
     }
     if (setting.value.secondDarkColor == null ||
         setting.value.secondDarkColor!.isEmpty) {
-      setting.value.secondDarkColor = defaultSecond;
+      setting.value.secondDarkColor = '#FFD600'; // darker yellow for dark theme
     }
     if (setting.value.accentDarkColor == null ||
         setting.value.accentDarkColor!.isEmpty) {
-      setting.value.accentDarkColor = defaultAccent;
+      setting.value.accentDarkColor = '#C017D1';
     }
   }
 
-  /// Force-apply a Barberaa-like palette at runtime and update the app theme.
+  /// Force-apply a modern vibrant palette at runtime and update the app theme.
   /// If [persist] is true the values will be written to local storage so they
   /// survive app restart (this does not update server settings).
   void applyBarberaaPalette({bool persist = false}) {
-    const barberaaMain = '#F7C948';
-    const barberaaSecond = '#12263A';
-    const barberaaAccent = '#F7C948';
-    const barberaaScaffold = '#FFFFFF';
+    const modernMain = '#D822F0'; // vibrant purple
+    const modernSecond = '#F2F22A'; // bright yellow
+    const modernAccent = '#D822F0';
+    const modernScaffold = '#FFFFFF';
+    const modernMainDark = '#C017D1'; // darker purple for dark theme
+    const modernSecondDark = '#FFD600'; // darker yellow for dark theme
 
-    setting.value.mainColor = barberaaMain;
-    setting.value.secondColor = barberaaSecond;
-    setting.value.accentColor = barberaaAccent;
-    setting.value.scaffoldColor = barberaaScaffold;
+    setting.value.mainColor = modernMain;
+    setting.value.secondColor = modernSecond;
+    setting.value.accentColor = modernAccent;
+    setting.value.scaffoldColor = modernScaffold;
 
-    setting.value.mainDarkColor = barberaaMain;
-    setting.value.secondDarkColor = barberaaSecond;
-    setting.value.accentDarkColor = barberaaAccent;
+    setting.value.mainDarkColor = modernMainDark;
+    setting.value.secondDarkColor = modernSecondDark;
+    setting.value.accentDarkColor = modernMainDark;
 
     if (persist) {
-      _box.write('setting_main_color', barberaaMain);
-      _box.write('setting_second_color', barberaaSecond);
-      _box.write('setting_accent_color', barberaaAccent);
-      _box.write('setting_scaffold_color', barberaaScaffold);
+      _box.write('setting_main_color', modernMain);
+      _box.write('setting_second_color', modernSecond);
+      _box.write('setting_accent_color', modernAccent);
+      _box.write('setting_scaffold_color', modernScaffold);
+      _box.write('setting_main_dark_color', modernMainDark);
+      _box.write('setting_second_dark_color', modernSecondDark);
+      _box.write('setting_accent_dark_color', modernMainDark);
     }
 
     // Ask GetX to update the app theme immediately
