@@ -9,7 +9,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/ui.dart';
 import '../../../models/slide_model.dart';
 import '../../../providers/laravel_provider.dart';
 import '../../../routes/app_routes.dart';
@@ -40,11 +39,11 @@ class Home2View extends GetView<HomeController> {
             shrinkWrap: false,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                expandedHeight: 240,
-                elevation: 0,
-                floating: true,
+                backgroundColor: Colors.amber,
+                expandedHeight: 300,
                 pinned: true,
+                floating: false,
+                elevation: 0,
                 iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
                 automaticallyImplyLeading: false,
                 leading: IconButton(
@@ -62,102 +61,69 @@ class Home2View extends GetView<HomeController> {
                 ),
                 centerTitle: false,
                 actions: const [NotificationsButtonWidget()],
-                bottom: HomeSearchBarWidget(),
                 flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.parallax,
-                  background: Obx(() {
-                    return Container(
-                      color: Theme.of(context).scaffoldBackgroundColor,
-                      child: Stack(
-                        alignment: controller.slider.isEmpty
-                            ? AlignmentDirectional.center
-                            : Ui.getAlignmentDirectional(controller.slider
-                                .elementAt(controller.currentSlide.value)
-                                .textPosition),
-                        children: <Widget>[
-                          CarouselSlider(
-                            options: CarouselOptions(
-                              autoPlay: true,
-                              autoPlayInterval: const Duration(seconds: 7),
-                              height: 240,
-                              viewportFraction: 0.95,
-                              padEnds: true,
-                              enlargeCenterPage: true,
-                              onPageChanged: (index, reason) {
-                                controller.currentSlide.value = index;
-                              },
+                  collapseMode: CollapseMode.pin,
+                  background: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 56, 8, 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// Greeting
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Text(
+                              "Hello, Abhishek",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                            items: controller.slider.map((Slide slide) {
-                              return SlideItemWidget(slide: slide);
-                            }).toList(),
                           ),
-                          Positioned(
-                            bottom: 02,
-                            left: Get.width / 2 -
-                                (controller.slider.length * 12) / 2,
+                          const SizedBox(height: 6),
+
+                          /// Location
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
                             child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: controller.slider.map((Slide slide) {
-                                return Container(
-                                  width: 8.0,
-                                  height: 8.0,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 3.0),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: controller.currentSlide.value ==
-                                              controller.slider.indexOf(slide)
-                                          ? slide.indicatorColor
-                                          : slide.indicatorColor
-                                              // ignore: deprecated_member_use
-                                              .withOpacity(0.3)),
-                                );
-                              }).toList(),
+                              children: [
+                                Icon(Icons.location_on,
+                                    color: Colors.white70, size: 18),
+                                SizedBox(width: 6),
+                                Expanded(
+                                  child: Text(
+                                    "3J67+RCP, Tulsi Marg, near Ess...",
+                                    style: TextStyle(color: Colors.white70),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                                Icon(Icons.keyboard_arrow_down,
+                                    color: Colors.white),
+                              ],
                             ),
                           ),
+
+                          const SizedBox(height: 8),
+
+                          /// Search bar
+                          HomeSearchBarWidget(),
+
+                          const SizedBox(height: 6),
+
+                          /// Categories
+                          CategoriesCarouselWidget(),
                         ],
                       ),
-                    );
-                  }),
-                ).marginOnly(bottom: 0),
+                    ),
+                  ),
+                ),
               ),
               SliverToBoxAdapter(
                 child: SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
                   child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 12),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                "Categories".tr,
-                                style: Get.textTheme.headlineSmall?.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                  color: Get.theme.hintColor,
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                Get.toNamed(Routes.CATEGORIES);
-                              },
-                              child: Text(
-                                "See All".tr,
-                                style: Get.textTheme.bodySmall?.copyWith(
-                                  color: Get.theme.colorScheme.secondary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      CategoriesCarouselWidget(),
-                      const SizedBox(height: 16),
                       AddressWidget().paddingSymmetric(horizontal: 16),
                       Padding(
                         padding: const EdgeInsets.symmetric(
@@ -192,6 +158,22 @@ class Home2View extends GetView<HomeController> {
                       const SizedBox(height: 20),
                       FeaturedCategoriesWidget(),
                       const SizedBox(height: 20),
+                      CarouselSlider(
+                        options: CarouselOptions(
+                          autoPlay: true,
+                          autoPlayInterval: const Duration(seconds: 7),
+                          height: 240,
+                          viewportFraction: 0.95,
+                          padEnds: true,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+                            controller.currentSlide.value = index;
+                          },
+                        ),
+                        items: controller.slider.map((Slide slide) {
+                          return SlideItemWidget(slide: slide);
+                        }).toList(),
+                      ),
                     ],
                   ),
                 ),

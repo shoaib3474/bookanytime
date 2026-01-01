@@ -16,7 +16,7 @@ class SearchBarWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       decoration: BoxDecoration(
           color: Get.theme.primaryColor,
           border: Border.all(
@@ -38,15 +38,16 @@ class SearchBarWidget extends StatelessWidget {
               style: Get.textTheme.bodySmall,
             ),
           ),
-          SizedBox(width: 8),
+          const SizedBox(width: 8),
           InkWell(
             onTap: () {
               //controller.increment();
             },
             child: Container(
-              padding: const EdgeInsets.only(right: 10, left: 10, top: 6, bottom: 6),
+              padding:
+                  const EdgeInsets.only(right: 10, left: 10, top: 6, bottom: 6),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(6)),
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
                 color: Get.theme.focusColor.withOpacity(0.1),
               ),
               child: Wrap(

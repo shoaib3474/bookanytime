@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 /*
  * File name: home_view.dart
  * Last modified: 2023.01.26 at 18:30:21
@@ -18,6 +20,8 @@ import '../widgets/recommended_carousel_widget.dart';
 import '../widgets/welcome_widget.dart';
 
 class HomeView extends GetView<HomeController> {
+  const HomeView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,8 +34,8 @@ class HomeView extends GetView<HomeController> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         automaticallyImplyLeading: false,
-        leading: new IconButton(
-          icon: new Icon(Icons.sort, color: Get.theme.hintColor),
+        leading: IconButton(
+          icon: Icon(Icons.sort, color: Get.theme.hintColor),
           onPressed: () => {Scaffold.of(context).openDrawer()},
         ),
       ),
@@ -48,16 +52,20 @@ class HomeView extends GetView<HomeController> {
               AddressWidget(),
               WelcomeWidget(),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: Row(
                   children: [
-                    Expanded(child: Text("Categories".tr, style: Get.textTheme.headlineSmall)),
+                    Expanded(
+                        child: Text("Categories".tr,
+                            style: Get.textTheme.headlineSmall)),
                     MaterialButton(
                       onPressed: () {},
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                      child: Text("View All".tr, style: Get.textTheme.titleMedium),
                       elevation: 0,
+                      child:
+                          Text("View All".tr, style: Get.textTheme.titleMedium),
                     ),
                   ],
                 ),
@@ -65,16 +73,20 @@ class HomeView extends GetView<HomeController> {
               CategoriesCarouselWidget(),
               Container(
                 color: Get.theme.primaryColor,
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
                 child: Row(
                   children: [
-                    Expanded(child: Text("Recommended for you".tr, style: Get.textTheme.headlineSmall)),
+                    Expanded(
+                        child: Text("Recommended for you".tr,
+                            style: Get.textTheme.headlineSmall)),
                     MaterialButton(
                       onPressed: () {},
-                      shape: StadiumBorder(),
+                      shape: const StadiumBorder(),
                       color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                      child: Text("View All".tr, style: Get.textTheme.titleMedium),
                       elevation: 0,
+                      child:
+                          Text("View All".tr, style: Get.textTheme.titleMedium),
                     ),
                   ],
                 ),

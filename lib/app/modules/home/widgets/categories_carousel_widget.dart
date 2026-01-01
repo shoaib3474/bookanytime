@@ -14,6 +14,8 @@ import '../controllers/home_controller.dart';
 import 'category_grid_item_widget.dart';
 
 class CategoriesCarouselWidget extends GetWidget<HomeController> {
+  const CategoriesCarouselWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,8 +35,14 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
             childAspectRatio: 0.75,
             primary: false,
             padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            crossAxisCount: MediaQuery.of(context).orientation == Orientation.portrait ? 4 : 6,
-            children: controller.categories.map((element) => CategoryGridItemWidget(category: element, heroTag: "heroTag")).toList(),
+            crossAxisCount:
+                MediaQuery.of(context).orientation == Orientation.portrait
+                    ? 4
+                    : 6,
+            children: controller.categories
+                .map((element) => CategoryGridItemWidget(
+                    category: element, heroTag: "heroTag"))
+                .toList(),
           );
       }),
     );
