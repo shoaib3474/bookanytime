@@ -120,22 +120,27 @@ class SettingsService extends GetxService {
     // TODO change font dynamically
     return ThemeData(
         primaryColor: Colors.white,
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            elevation: 0, foregroundColor: Colors.white),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+            elevation: 0,
+            foregroundColor: Colors.white,
+            backgroundColor: Ui.parseColor(setting.value.mainColor)),
         brightness: Brightness.light,
-        dividerColor: Ui.parseColor(setting.value.accentColor, opacity: 0.1),
-        focusColor: Ui.parseColor(setting.value.accentColor),
-        hintColor: Ui.parseColor(setting.value.secondColor),
+        dividerColor: Ui.parseColor(setting.value.accentColor, opacity: 0.08),
+        focusColor: Ui.parseColor(setting.value.accentColor, opacity: 0.1),
+        hintColor: const Color(0xFF9E9E9E),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
               foregroundColor: Ui.parseColor(setting.value.mainColor)),
         ),
         colorScheme: ColorScheme.light(
           primary: Ui.parseColor(setting.value.mainColor),
-          secondary: Ui.parseColor(setting.value.mainColor),
+          secondary: Ui.parseColor(setting.value.secondColor),
+          tertiary: const Color(0xFF6C63FF),
           outline: Ui.parseColor(setting.value.accentColor, opacity: 0.1),
           outlineVariant:
-              Ui.parseColor(setting.value.accentColor, opacity: 0.1),
+              Ui.parseColor(setting.value.accentColor, opacity: 0.08),
+          surface: Colors.white,
+          surfaceVariant: const Color(0xFFF5F5F5),
         ),
         textTheme: GoogleFonts.getTextTheme(
           _getLocale().startsWith('ar') ? 'Cairo' : 'Poppins',
@@ -148,17 +153,17 @@ class SettingsService extends GetxService {
             headlineSmall: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.w700,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF2C2C2C),
                 height: 1.3),
             headlineMedium: TextStyle(
                 fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-                color: Ui.parseColor(setting.value.secondColor),
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1A1A1A),
                 height: 1.3),
             displaySmall: TextStyle(
                 fontSize: 20.0,
                 fontWeight: FontWeight.w700,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF1A1A1A),
                 height: 1.3),
             displayMedium: TextStyle(
                 fontSize: 22.0,
@@ -167,33 +172,33 @@ class SettingsService extends GetxService {
                 height: 1.4),
             displayLarge: TextStyle(
                 fontSize: 24.0,
-                fontWeight: FontWeight.w300,
-                color: Ui.parseColor(setting.value.secondColor),
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1A1A1A),
                 height: 1.4),
             titleSmall: TextStyle(
                 fontSize: 15.0,
                 fontWeight: FontWeight.w600,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF424242),
                 height: 1.2),
             titleMedium: TextStyle(
                 fontSize: 13.0,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
                 color: Ui.parseColor(setting.value.mainColor),
                 height: 1.2),
             bodyMedium: TextStyle(
                 fontSize: 13.0,
                 fontWeight: FontWeight.w600,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF424242),
                 height: 1.2),
             bodyLarge: TextStyle(
                 fontSize: 12.0,
-                fontWeight: FontWeight.w400,
-                color: Ui.parseColor(setting.value.secondColor),
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF616161),
                 height: 1.2),
             bodySmall: TextStyle(
                 fontSize: 12.0,
-                fontWeight: FontWeight.w300,
-                color: Ui.parseColor(setting.value.accentColor),
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF9E9E9E),
                 height: 1.2),
           ),
         ));
@@ -202,25 +207,30 @@ class SettingsService extends GetxService {
   ThemeData getDarkTheme() {
     // TODO change font dynamically
     return ThemeData(
-        primaryColor: const Color(0xFF252525),
-        floatingActionButtonTheme:
-            const FloatingActionButtonThemeData(elevation: 0),
-        scaffoldBackgroundColor: const Color(0xFF2C2C2C),
+        primaryColor: const Color(0xFF1A1A1A),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+            elevation: 0,
+            backgroundColor: Ui.parseColor(setting.value.mainDarkColor),
+            foregroundColor: Colors.white),
+        scaffoldBackgroundColor: const Color(0xFF121212),
         brightness: Brightness.dark,
         dividerColor:
-            Ui.parseColor(setting.value.accentDarkColor, opacity: 0.1),
-        focusColor: Ui.parseColor(setting.value.accentDarkColor),
-        hintColor: Ui.parseColor(setting.value.secondDarkColor),
+            Ui.parseColor(setting.value.accentDarkColor, opacity: 0.08),
+        focusColor: Ui.parseColor(setting.value.accentDarkColor, opacity: 0.1),
+        hintColor: const Color(0xFF9E9E9E),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-              foregroundColor: Ui.parseColor(setting.value.mainColor)),
+              foregroundColor: Ui.parseColor(setting.value.mainDarkColor)),
         ),
         colorScheme: ColorScheme.dark(
           primary: Ui.parseColor(setting.value.mainDarkColor),
-          secondary: Ui.parseColor(setting.value.mainDarkColor),
+          secondary: Ui.parseColor(setting.value.secondDarkColor),
+          tertiary: const Color(0xFF8B5CF6),
           outline: Ui.parseColor(setting.value.accentDarkColor, opacity: 0.1),
           outlineVariant:
-              Ui.parseColor(setting.value.accentDarkColor, opacity: 0.1),
+              Ui.parseColor(setting.value.accentDarkColor, opacity: 0.08),
+          surface: const Color(0xFF1E1E1E),
+          surfaceVariant: const Color(0xFF2C2C2C),
         ),
         textTheme: GoogleFonts.getTextTheme(
             _getLocale().startsWith('ar') ? 'Cairo' : 'Poppins',
@@ -233,17 +243,17 @@ class SettingsService extends GetxService {
               headlineSmall: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w700,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFF5F5F5),
                   height: 1.3),
               headlineMedium: TextStyle(
                   fontSize: 18.0,
-                  fontWeight: FontWeight.w400,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFFFFFFFF),
                   height: 1.3),
               displaySmall: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w700,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFFFFFFF),
                   height: 1.3),
               displayMedium: TextStyle(
                   fontSize: 22.0,
@@ -252,33 +262,33 @@ class SettingsService extends GetxService {
                   height: 1.4),
               displayLarge: TextStyle(
                   fontSize: 24.0,
-                  fontWeight: FontWeight.w300,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFFFFFFFF),
                   height: 1.4),
               titleSmall: TextStyle(
                   fontSize: 15.0,
                   fontWeight: FontWeight.w600,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFBDBDBD),
                   height: 1.2),
               titleMedium: TextStyle(
                   fontSize: 13.0,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                   color: Ui.parseColor(setting.value.mainDarkColor),
                   height: 1.2),
               bodyMedium: TextStyle(
                   fontSize: 13.0,
                   fontWeight: FontWeight.w600,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFBDBDBD),
                   height: 1.2),
               bodyLarge: TextStyle(
                   fontSize: 12.0,
-                  fontWeight: FontWeight.w400,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFF9E9E9E),
                   height: 1.2),
               bodySmall: TextStyle(
                   fontSize: 12.0,
-                  fontWeight: FontWeight.w300,
-                  color: Ui.parseColor(setting.value.accentDarkColor),
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF757575),
                   height: 1.2),
             )));
   }
@@ -287,19 +297,21 @@ class SettingsService extends GetxService {
     // TODO change font dynamically
     return ThemeData(
         primaryColor: Colors.white,
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-            elevation: 0, foregroundColor: Colors.white),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+            elevation: 0,
+            foregroundColor: Colors.white,
+            backgroundColor: Ui.parseColor(setting.value.mainColor)),
         brightness: Brightness.light,
-        dividerColor: Ui.parseColor(setting.value.accentColor, opacity: 0.1),
-        focusColor: Ui.parseColor(setting.value.accentColor),
-        hintColor: Ui.parseColor(setting.value.secondColor),
+        dividerColor: Ui.parseColor(setting.value.accentColor, opacity: 0.08),
+        focusColor: Ui.parseColor(setting.value.accentColor, opacity: 0.1),
+        hintColor: const Color(0xFF9E9E9E),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
               foregroundColor: Ui.parseColor(setting.value.mainColor)),
         ),
         colorScheme: ColorScheme.light(
           primary: Ui.parseColor(setting.value.mainColor),
-          secondary: Ui.parseColor(setting.value.mainColor),
+          secondary: Ui.parseColor(setting.value.secondColor),
         ),
         textTheme: GoogleFonts.getTextTheme(
           _getLocale().toString().startsWith('ar') ? 'Cairo' : 'Poppins',
@@ -312,17 +324,17 @@ class SettingsService extends GetxService {
             headlineSmall: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w700,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF2C2C2C),
                 height: 1.3),
             headlineMedium: TextStyle(
                 fontSize: 20.0,
-                fontWeight: FontWeight.w400,
-                color: Ui.parseColor(setting.value.secondColor),
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1A1A1A),
                 height: 1.3),
             displaySmall: TextStyle(
                 fontSize: 22.0,
                 fontWeight: FontWeight.w700,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF1A1A1A),
                 height: 1.3),
             displayMedium: TextStyle(
                 fontSize: 24.0,
@@ -331,33 +343,33 @@ class SettingsService extends GetxService {
                 height: 1.4),
             displayLarge: TextStyle(
                 fontSize: 28.0,
-                fontWeight: FontWeight.w300,
-                color: Ui.parseColor(setting.value.secondColor),
+                fontWeight: FontWeight.w600,
+                color: const Color(0xFF1A1A1A),
                 height: 1.4),
             titleSmall: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.w600,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF424242),
                 height: 1.2),
             titleMedium: TextStyle(
                 fontSize: 16.0,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w600,
                 color: Ui.parseColor(setting.value.mainColor),
                 height: 1.2),
             bodyMedium: TextStyle(
                 fontSize: 16.0,
                 fontWeight: FontWeight.w600,
-                color: Ui.parseColor(setting.value.secondColor),
+                color: const Color(0xFF424242),
                 height: 1.2),
             bodyLarge: TextStyle(
                 fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-                color: Ui.parseColor(setting.value.secondColor),
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFF616161),
                 height: 1.2),
             bodySmall: TextStyle(
                 fontSize: 14.0,
-                fontWeight: FontWeight.w300,
-                color: Ui.parseColor(setting.value.accentColor),
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF9E9E9E),
                 height: 1.2),
           ),
         ));
@@ -366,22 +378,24 @@ class SettingsService extends GetxService {
   ThemeData getWebDarkTheme() {
     // TODO change font dynamically
     return ThemeData(
-        primaryColor: const Color(0xFF252525),
-        floatingActionButtonTheme:
-            const FloatingActionButtonThemeData(elevation: 0),
-        scaffoldBackgroundColor: const Color(0xFF2C2C2C),
+        primaryColor: const Color(0xFF1A1A1A),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+            elevation: 0,
+            backgroundColor: Ui.parseColor(setting.value.mainDarkColor),
+            foregroundColor: Colors.white),
+        scaffoldBackgroundColor: const Color(0xFF121212),
         brightness: Brightness.dark,
         dividerColor:
-            Ui.parseColor(setting.value.accentDarkColor, opacity: 0.1),
-        focusColor: Ui.parseColor(setting.value.accentDarkColor),
-        hintColor: Ui.parseColor(setting.value.secondDarkColor),
+            Ui.parseColor(setting.value.accentDarkColor, opacity: 0.08),
+        focusColor: Ui.parseColor(setting.value.accentDarkColor, opacity: 0.1),
+        hintColor: const Color(0xFF9E9E9E),
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
-              foregroundColor: Ui.parseColor(setting.value.mainColor)),
+              foregroundColor: Ui.parseColor(setting.value.mainDarkColor)),
         ),
         colorScheme: ColorScheme.dark(
           primary: Ui.parseColor(setting.value.mainDarkColor),
-          secondary: Ui.parseColor(setting.value.mainDarkColor),
+          secondary: Ui.parseColor(setting.value.secondDarkColor),
         ),
         textTheme: GoogleFonts.getTextTheme(
             _getLocale().toString().startsWith('ar') ? 'Cairo' : 'Poppins',
@@ -394,17 +408,17 @@ class SettingsService extends GetxService {
               headlineSmall: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.w700,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFF5F5F5),
                   height: 1.3),
               headlineMedium: TextStyle(
                   fontSize: 20.0,
-                  fontWeight: FontWeight.w400,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFFFFFFFF),
                   height: 1.3),
               displaySmall: TextStyle(
                   fontSize: 22.0,
                   fontWeight: FontWeight.w700,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFFFFFFF),
                   height: 1.3),
               displayMedium: TextStyle(
                   fontSize: 24.0,
@@ -413,33 +427,33 @@ class SettingsService extends GetxService {
                   height: 1.4),
               displayLarge: TextStyle(
                   fontSize: 28.0,
-                  fontWeight: FontWeight.w300,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  fontWeight: FontWeight.w600,
+                  color: const Color(0xFFFFFFFF),
                   height: 1.4),
               titleSmall: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFBDBDBD),
                   height: 1.2),
               titleMedium: TextStyle(
                   fontSize: 16.0,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                   color: Ui.parseColor(setting.value.mainDarkColor),
                   height: 1.2),
               bodyMedium: TextStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w600,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  color: const Color(0xFFBDBDBD),
                   height: 1.2),
               bodyLarge: TextStyle(
                   fontSize: 14.0,
-                  fontWeight: FontWeight.w400,
-                  color: Ui.parseColor(setting.value.secondDarkColor),
+                  fontWeight: FontWeight.w500,
+                  color: const Color(0xFF9E9E9E),
                   height: 1.2),
               bodySmall: TextStyle(
                   fontSize: 14.0,
-                  fontWeight: FontWeight.w300,
-                  color: Ui.parseColor(setting.value.accentDarkColor),
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF757575),
                   height: 1.2),
             )));
   }
