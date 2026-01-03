@@ -42,7 +42,9 @@ class SalonEServicesController extends GetxController {
   Future<void> onInit() async {
     booking.value.salon = Get.find<SalonController>().salon.value;
     scrollController.addListener(() {
-      if (scrollController.position.pixels == scrollController.position.maxScrollExtent && !isDone.value) {
+      if (scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent &&
+          !isDone.value) {
         loadEServicesOfCategory();
       }
     });
@@ -60,15 +62,17 @@ class SalonEServicesController extends GetxController {
     toggleSelected(selected.value);
     await loadEServicesOfCategory();
     if (showMessage == true) {
-      Get.showSnackbar(Ui.SuccessSnackBar(message: "List of services refreshed successfully".tr));
+      Get.showSnackbar(Ui.SuccessSnackBar(
+          message: "List of services refreshed successfully".tr));
     }
   }
 
+  // ignore: unrelated_type_equality_checks
   bool isSelected(CategoryFilter filter) => selected == filter;
 
   void toggleSelected(CategoryFilter filter) {
-    this.eServices.clear();
-    this.page.value = 0;
+    eServices.clear();
+    page.value = 0;
     if (isSelected(filter)) {
       selected.value = CategoryFilter.ALL;
     } else {
@@ -81,8 +85,8 @@ class SalonEServicesController extends GetxController {
   }
 
   void toggleCategory(bool value, Category category) {
-    this.eServices.clear();
-    this.page.value = 0;
+    eServices.clear();
+    page.value = 0;
     if (value) {
       selectedCategories.add(category.id!);
     } else {
@@ -102,34 +106,42 @@ class SalonEServicesController extends GetxController {
     try {
       isLoading.value = true;
       isDone.value = false;
-      this.page.value++;
+      page.value++;
       List<EService> _eServices = [];
       switch (selected.value) {
         case CategoryFilter.ALL:
-          _eServices = await _salonRepository.getEServices(booking.value.salon!.id!, selectedCategories, page: this.page.value);
+          _eServices = await _salonRepository.getEServices(
+              booking.value.salon!.id!, selectedCategories,
+              page: page.value);
           break;
         case CategoryFilter.FEATURED:
-          _eServices = await _salonRepository.getFeaturedEServices(booking.value.salon!.id!, selectedCategories, page: this.page.value);
+          _eServices = await _salonRepository.getFeaturedEServices(
+              booking.value.salon!.id!, selectedCategories,
+              page: page.value);
           break;
         case CategoryFilter.POPULAR:
-          _eServices = await _salonRepository.getPopularEServices(booking.value.salon!.id!, selectedCategories, page: this.page.value);
+          _eServices = await _salonRepository.getPopularEServices(
+              booking.value.salon!.id!, selectedCategories,
+              page: page.value);
           break;
         case CategoryFilter.RATING:
-          _eServices = await _salonRepository.getMostRatedEServices(booking.value.salon!.id!, selectedCategories, page: this.page.value);
+          _eServices = await _salonRepository.getMostRatedEServices(
+              booking.value.salon!.id!, selectedCategories,
+              page: page.value);
           break;
         case CategoryFilter.AVAILABILITY:
-          _eServices = await _salonRepository.getAvailableEServices(booking.value.salon!.id!, selectedCategories, page: this.page.value);
+          _eServices = await _salonRepository.getAvailableEServices(
+              booking.value.salon!.id!, selectedCategories,
+              page: page.value);
           break;
-        default:
-          _eServices = await _salonRepository.getEServices(booking.value.salon!.id!, selectedCategories, page: this.page.value);
       }
       if (_eServices.isNotEmpty) {
-        this.eServices.addAll(_eServices);
+        eServices.addAll(_eServices);
       } else {
         isDone.value = true;
       }
     } catch (e) {
-      this.isDone.value = true;
+      isDone.value = true;
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     } finally {
       isLoading.value = false;
@@ -147,7 +159,8 @@ class SalonEServicesController extends GetxController {
         }
       });
     } else {
-      Get.showSnackbar(Ui.notificationSnackBar(title: "Alert", message: "Service not enabled for booking".tr));
+      Get.showSnackbar(Ui.notificationSnackBar(
+          title: "Alert", message: "Service not enabled for booking".tr));
     }
   }
 
@@ -162,7 +175,8 @@ class SalonEServicesController extends GetxController {
           val.options!.remove(option);
         } else {
           if (!optionGroup.allowMultiple!) {
-            val.options!.removeWhere((element) => element.optionGroupId == optionGroup.id);
+            val.options!.removeWhere(
+                (element) => element.optionGroupId == optionGroup.id);
           }
           val.options!.add(option);
         }
@@ -171,7 +185,8 @@ class SalonEServicesController extends GetxController {
         }
       });
     } else {
-      Get.showSnackbar(Ui.notificationSnackBar(title: "Alert", message: "Service not enabled for booking".tr));
+      Get.showSnackbar(Ui.notificationSnackBar(
+          title: "Alert", message: "Service not enabled for booking".tr));
     }
   }
 
@@ -195,14 +210,16 @@ class SalonEServicesController extends GetxController {
 
   TextStyle getTitleTheme(Option option) {
     if (isCheckedOption(option)) {
-      return Get.textTheme.bodyMedium!.merge(TextStyle(color: Get.theme.colorScheme.secondary));
+      return Get.textTheme.bodyMedium!
+          .merge(TextStyle(color: Get.theme.colorScheme.secondary));
     }
     return Get.textTheme.bodyMedium!;
   }
 
   TextStyle getSubTitleTheme(Option option) {
     if (isCheckedOption(option)) {
-      return Get.textTheme.bodySmall!.merge(TextStyle(color: Get.theme.colorScheme.secondary));
+      return Get.textTheme.bodySmall!
+          .merge(TextStyle(color: Get.theme.colorScheme.secondary));
     }
     return Get.textTheme.bodySmall!;
   }

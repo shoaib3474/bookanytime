@@ -25,20 +25,32 @@ class FeaturedCategoriesWidget extends GetWidget<HomeController> {
           var _category = controller.featured.elementAt(index);
           return Column(
             children: [
-              SizedBox(height: 15),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Expanded(child: Text(_category.name!, style: Get.textTheme.headlineSmall)),
-                    MaterialButton(
-                      onPressed: () {
+                    Expanded(
+                      child: Text(
+                        _category.name!,
+                        style: Get.textTheme.headlineSmall?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: Get.theme.hintColor,
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
                         Get.toNamed(Routes.CATEGORY, arguments: _category);
                       },
-                      shape: StadiumBorder(),
-                      color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                      child: Text("View All".tr, style: Get.textTheme.titleMedium),
-                      elevation: 0,
+                      child: Text(
+                        "See All".tr,
+                        style: Get.textTheme.bodySmall?.copyWith(
+                          color: Get.theme.colorScheme.secondary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -46,15 +58,18 @@ class FeaturedCategoriesWidget extends GetWidget<HomeController> {
               Obx(() {
                 if (controller.featured.elementAt(index).eServices!.isEmpty) {
                   return Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 32),
                     child: Text(
-                      "Mark services as featured to list them on the home screen".tr,
+                      "Mark services as featured to list them on the home screen"
+                          .tr,
                       textAlign: TextAlign.center,
                       style: Get.textTheme.bodySmall,
                     ),
                   );
                 }
-                return ServicesCarouselWidget(services: controller.featured.elementAt(index).eServices!);
+                return ServicesCarouselWidget(
+                    services: controller.featured.elementAt(index).eServices!);
               }),
             ],
           );

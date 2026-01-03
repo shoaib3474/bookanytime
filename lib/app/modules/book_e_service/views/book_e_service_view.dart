@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 /*
  * File name: book_e_service_view.dart
  * Last modified: 2023.02.09 at 15:16:38
@@ -22,6 +24,8 @@ import '../../global_widgets/text_field_widget.dart';
 import '../controllers/book_e_service_controller.dart';
 
 class BookEServiceView extends GetView<BookEServiceController> {
+  const BookEServiceView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,8 +37,8 @@ class BookEServiceView extends GetView<BookEServiceController> {
           centerTitle: true,
           backgroundColor: Colors.transparent,
           automaticallyImplyLeading: false,
-          leading: new IconButton(
-            icon: new Icon(Icons.arrow_back_ios, color: Get.theme.hintColor),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: Get.theme.hintColor),
             onPressed: () => Get.back(),
           ),
           elevation: 0,
@@ -50,8 +54,10 @@ class BookEServiceView extends GetView<BookEServiceController> {
             children: [
               Container(
                 decoration: Ui.getBoxDecoration(),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -59,26 +65,32 @@ class BookEServiceView extends GetView<BookEServiceController> {
                       'Choose employee'.tr,
                       style: Get.textTheme.bodyLarge,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     ListView.separated(
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       primary: false,
                       padding: EdgeInsets.zero,
-                      itemCount: controller.booking.value.salon?.employees?.length ?? 0,
+                      itemCount:
+                          controller.booking.value.salon?.employees?.length ??
+                              0,
                       separatorBuilder: (context, index) {
-                        return SizedBox(height: 6);
+                        return const SizedBox(height: 6);
                       },
                       itemBuilder: (context, index) {
-                        var _employee = controller.booking.value.salon?.employees?.elementAt(index);
+                        var _employee = controller
+                            .booking.value.salon?.employees
+                            ?.elementAt(index);
                         return GestureDetector(
                           onTap: () {
-                            Get.find<TabBarController>(tag: 'hours').selectedId.value = "";
+                            Get.find<TabBarController>(tag: 'hours')
+                                .selectedId
+                                .value = "";
                             controller.selectEmployee(_employee!);
                           },
                           child: Obx(() {
                             return Container(
-                              padding: EdgeInsets.symmetric(vertical: 4),
+                              padding: const EdgeInsets.symmetric(vertical: 4),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
@@ -86,39 +98,58 @@ class BookEServiceView extends GetView<BookEServiceController> {
                                     alignment: AlignmentDirectional.center,
                                     children: [
                                       ClipRRect(
-                                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
                                         child: CachedNetworkImage(
                                           height: 42,
                                           width: 42,
                                           fit: BoxFit.cover,
-                                          imageUrl: _employee?.avatar.thumb ?? '',
-                                          placeholder: (context, url) => Image.asset(
+                                          imageUrl:
+                                              _employee?.avatar.thumb ?? '',
+                                          placeholder: (context, url) =>
+                                              Image.asset(
                                             'assets/img/loading.gif',
                                             fit: BoxFit.cover,
                                             height: 42,
                                             width: 42,
                                           ),
-                                          errorWidget: (context, url, error) => Icon(Icons.error_outline),
+                                          errorWidget: (context, url, error) =>
+                                              const Icon(Icons.error_outline),
                                         ),
                                       ),
                                       Container(
                                         height: 42,
                                         width: 42,
                                         decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                                          color: Get.theme.colorScheme.secondary.withOpacity(controller.isCheckedEmployee(_employee!) ? 0.8 : 0),
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10)),
+                                          color: Get.theme.colorScheme.secondary
+                                              .withOpacity(
+                                                  controller.isCheckedEmployee(
+                                                          _employee!)
+                                                      ? 0.8
+                                                      : 0),
                                         ),
                                         child: Icon(
                                           Icons.check,
                                           size: 28,
-                                          color: Theme.of(context).primaryColor.withOpacity(controller.isCheckedEmployee(_employee) ? 1 : 0),
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(
+                                                  controller.isCheckedEmployee(
+                                                          _employee)
+                                                      ? 1
+                                                      : 0),
                                         ),
                                       ),
                                     ],
                                   ),
-                                  SizedBox(width: 10),
+                                  const SizedBox(width: 10),
                                   Expanded(
-                                    child: Text(_employee.name ?? '', style: controller.getTitleTheme(_employee)).paddingOnly(bottom: 5),
+                                    child: Text(_employee.name ?? '',
+                                            style: controller
+                                                .getTitleTheme(_employee))
+                                        .paddingOnly(bottom: 5),
                                   ),
                                 ],
                               ),
@@ -132,13 +163,13 @@ class BookEServiceView extends GetView<BookEServiceController> {
               ),
               Container(
                 decoration: Ui.getBoxDecoration(),
-                margin: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                padding: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 15),
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: DatePicker(
                         DateTime.now(),
                         width: 60,
@@ -151,14 +182,18 @@ class BookEServiceView extends GetView<BookEServiceController> {
                         locale: Get.locale.toString(),
                         onDateChange: (date) async {
                           // New date selected
-                          Get.find<TabBarController>(tag: 'hours').selectedId.value = "";
+                          Get.find<TabBarController>(tag: 'hours')
+                              .selectedId
+                              .value = "";
                           await controller.getTimes(date: date);
                         },
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
-                      child: Text("Morning".tr, style: Get.textTheme.bodyMedium),
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 5, left: 20, right: 20),
+                      child:
+                          Text("Morning".tr, style: Get.textTheme.bodyMedium),
                     ),
                     Obx(() {
                       if (controller.morningTimes.isEmpty) {
@@ -167,31 +202,47 @@ class BookEServiceView extends GetView<BookEServiceController> {
                         return TabBarWidget(
                           initialSelectedId: "",
                           tag: 'hours',
-                          tabs: List.generate(controller.morningTimes.length, (index) {
-                            final _time = controller.morningTimes.elementAt(index).elementAt(0);
-                            bool _available = controller.morningTimes.elementAt(index).elementAt(1);
+                          tabs: List.generate(controller.morningTimes.length,
+                              (index) {
+                            final _time = controller.morningTimes
+                                .elementAt(index)
+                                .elementAt(0);
+                            bool _available = controller.morningTimes
+                                .elementAt(index)
+                                .elementAt(1);
                             if (_available) {
                               return ChipWidget(
-                                backgroundColor: Get.theme.colorScheme.secondary.withOpacity(0.2),
-                                style: Get.textTheme.bodyLarge!.merge(TextStyle(color: Get.theme.colorScheme.secondary)),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                                backgroundColor: Get.theme.colorScheme.secondary
+                                    .withOpacity(0.2),
+                                style: Get.textTheme.bodyLarge!.merge(TextStyle(
+                                    color: Get.theme.colorScheme.secondary)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
                                 tag: 'hours',
-                                text: DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()),
+                                text: DateFormat('HH:mm')
+                                    .format(DateTime.parse(_time).toLocal()),
                                 id: _time,
                                 onSelected: (id) {
                                   controller.booking.update((val) {
-                                    val!.bookingAt = DateTime.parse(id).toLocal();
+                                    val!.bookingAt =
+                                        DateTime.parse(id).toLocal();
                                   });
                                 },
                               );
                             } else {
                               return RawChip(
                                 elevation: 0,
-                                label: Text(DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()), style: Get.textTheme.bodySmall),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                                backgroundColor: Get.theme.focusColor.withOpacity(0.1),
+                                label: Text(
+                                    DateFormat('HH:mm').format(
+                                        DateTime.parse(_time).toLocal()),
+                                    style: Get.textTheme.bodySmall),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
+                                backgroundColor:
+                                    Get.theme.focusColor.withOpacity(0.1),
                                 selectedColor: Get.theme.colorScheme.secondary,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 showCheckmark: false,
                                 pressElevation: 0,
                               ).marginSymmetric(horizontal: 5);
@@ -201,8 +252,10 @@ class BookEServiceView extends GetView<BookEServiceController> {
                       }
                     }),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
-                      child: Text("Afternoon".tr, style: Get.textTheme.bodyMedium),
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 5, left: 20, right: 20),
+                      child:
+                          Text("Afternoon".tr, style: Get.textTheme.bodyMedium),
                     ),
                     Obx(() {
                       if (controller.afternoonTimes.isEmpty) {
@@ -211,31 +264,48 @@ class BookEServiceView extends GetView<BookEServiceController> {
                         return TabBarWidget(
                           initialSelectedId: "",
                           tag: 'hours',
-                          tabs: List.generate(controller.afternoonTimes.length, (index) {
-                            final _time = controller.afternoonTimes.elementAt(index).elementAt(0);
-                            bool _available = controller.afternoonTimes.elementAt(index).elementAt(1);
+                          tabs: List.generate(controller.afternoonTimes.length,
+                              (index) {
+                            // ignore: no_leading_underscores_for_local_identifiers
+                            final _time = controller.afternoonTimes
+                                .elementAt(index)
+                                .elementAt(0);
+                            bool _available = controller.afternoonTimes
+                                .elementAt(index)
+                                .elementAt(1);
                             if (_available) {
                               return ChipWidget(
-                                backgroundColor: Get.theme.colorScheme.secondary.withOpacity(0.2),
-                                style: Get.textTheme.bodyLarge!.merge(TextStyle(color: Get.theme.colorScheme.secondary)),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                                backgroundColor: Get.theme.colorScheme.secondary
+                                    .withOpacity(0.2),
+                                style: Get.textTheme.bodyLarge!.merge(TextStyle(
+                                    color: Get.theme.colorScheme.secondary)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
                                 tag: 'hours',
-                                text: DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()),
+                                text: DateFormat('HH:mm')
+                                    .format(DateTime.parse(_time).toLocal()),
                                 id: _time,
                                 onSelected: (id) {
                                   controller.booking.update((val) {
-                                    val!.bookingAt = DateTime.parse(id).toLocal();
+                                    val!.bookingAt =
+                                        DateTime.parse(id).toLocal();
                                   });
                                 },
                               );
                             } else {
                               return RawChip(
                                 elevation: 0,
-                                label: Text(DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()), style: Get.textTheme.bodySmall),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                                backgroundColor: Get.theme.focusColor.withOpacity(0.1),
+                                label: Text(
+                                    DateFormat('HH:mm').format(
+                                        DateTime.parse(_time).toLocal()),
+                                    style: Get.textTheme.bodySmall),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
+                                backgroundColor:
+                                    Get.theme.focusColor.withOpacity(0.1),
                                 selectedColor: Get.theme.colorScheme.secondary,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 showCheckmark: false,
                                 pressElevation: 0,
                               ).marginSymmetric(horizontal: 5);
@@ -245,8 +315,10 @@ class BookEServiceView extends GetView<BookEServiceController> {
                       }
                     }),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
-                      child: Text("Evening".tr, style: Get.textTheme.bodyMedium),
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 5, left: 20, right: 20),
+                      child:
+                          Text("Evening".tr, style: Get.textTheme.bodyMedium),
                     ),
                     Obx(() {
                       if (controller.eveningTimes.isEmpty) {
@@ -255,31 +327,47 @@ class BookEServiceView extends GetView<BookEServiceController> {
                         return TabBarWidget(
                           initialSelectedId: "",
                           tag: 'hours',
-                          tabs: List.generate(controller.eveningTimes.length, (index) {
-                            final _time = controller.eveningTimes.elementAt(index).elementAt(0);
-                            bool _available = controller.eveningTimes.elementAt(index).elementAt(1);
+                          tabs: List.generate(controller.eveningTimes.length,
+                              (index) {
+                            final _time = controller.eveningTimes
+                                .elementAt(index)
+                                .elementAt(0);
+                            bool _available = controller.eveningTimes
+                                .elementAt(index)
+                                .elementAt(1);
                             if (_available) {
                               return ChipWidget(
-                                backgroundColor: Get.theme.colorScheme.secondary.withOpacity(0.2),
-                                style: Get.textTheme.bodyLarge!.merge(TextStyle(color: Get.theme.colorScheme.secondary)),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                                backgroundColor: Get.theme.colorScheme.secondary
+                                    .withOpacity(0.2),
+                                style: Get.textTheme.bodyLarge!.merge(TextStyle(
+                                    color: Get.theme.colorScheme.secondary)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
                                 tag: 'hours',
-                                text: DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()),
+                                text: DateFormat('HH:mm')
+                                    .format(DateTime.parse(_time).toLocal()),
                                 id: _time,
                                 onSelected: (id) {
                                   controller.booking.update((val) {
-                                    val!.bookingAt = DateTime.parse(id).toLocal();
+                                    val!.bookingAt =
+                                        DateTime.parse(id).toLocal();
                                   });
                                 },
                               );
                             } else {
                               return RawChip(
                                 elevation: 0,
-                                label: Text(DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()), style: Get.textTheme.bodySmall),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                                backgroundColor: Get.theme.focusColor.withOpacity(0.1),
+                                label: Text(
+                                    DateFormat('HH:mm').format(
+                                        DateTime.parse(_time).toLocal()),
+                                    style: Get.textTheme.bodySmall),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
+                                backgroundColor:
+                                    Get.theme.focusColor.withOpacity(0.1),
                                 selectedColor: Get.theme.colorScheme.secondary,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 showCheckmark: false,
                                 pressElevation: 0,
                               ).marginSymmetric(horizontal: 5);
@@ -289,7 +377,8 @@ class BookEServiceView extends GetView<BookEServiceController> {
                       }
                     }),
                     Padding(
-                      padding: const EdgeInsets.only(top: 10, bottom: 5, left: 20, right: 20),
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 5, left: 20, right: 20),
                       child: Text("Night".tr, style: Get.textTheme.bodyMedium),
                     ),
                     Obx(() {
@@ -299,31 +388,47 @@ class BookEServiceView extends GetView<BookEServiceController> {
                         return TabBarWidget(
                           initialSelectedId: "",
                           tag: 'hours',
-                          tabs: List.generate(controller.nightTimes.length, (index) {
-                            final _time = controller.nightTimes.elementAt(index).elementAt(0);
-                            bool _available = controller.nightTimes.elementAt(index).elementAt(1);
+                          tabs: List.generate(controller.nightTimes.length,
+                              (index) {
+                            final _time = controller.nightTimes
+                                .elementAt(index)
+                                .elementAt(0);
+                            bool _available = controller.nightTimes
+                                .elementAt(index)
+                                .elementAt(1);
                             if (_available) {
                               return ChipWidget(
-                                backgroundColor: Get.theme.colorScheme.secondary.withOpacity(0.2),
-                                style: Get.textTheme.bodyLarge!.merge(TextStyle(color: Get.theme.colorScheme.secondary)),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+                                backgroundColor: Get.theme.colorScheme.secondary
+                                    .withOpacity(0.2),
+                                style: Get.textTheme.bodyLarge!.merge(TextStyle(
+                                    color: Get.theme.colorScheme.secondary)),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
                                 tag: 'hours',
-                                text: DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()),
+                                text: DateFormat('HH:mm')
+                                    .format(DateTime.parse(_time).toLocal()),
                                 id: _time,
                                 onSelected: (id) {
                                   controller.booking.update((val) {
-                                    val!.bookingAt = DateTime.parse(id).toLocal();
+                                    val!.bookingAt =
+                                        DateTime.parse(id).toLocal();
                                   });
                                 },
                               );
                             } else {
                               return RawChip(
                                 elevation: 0,
-                                label: Text(DateFormat('HH:mm').format(DateTime.parse(_time).toLocal()), style: Get.textTheme.bodySmall),
-                                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 15),
-                                backgroundColor: Get.theme.focusColor.withOpacity(0.1),
+                                label: Text(
+                                    DateFormat('HH:mm').format(
+                                        DateTime.parse(_time).toLocal()),
+                                    style: Get.textTheme.bodySmall),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 5, vertical: 15),
+                                backgroundColor:
+                                    Get.theme.focusColor.withOpacity(0.1),
                                 selectedColor: Get.theme.colorScheme.secondary,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
                                 showCheckmark: false,
                                 pressElevation: 0,
                               ).marginSymmetric(horizontal: 5);
@@ -336,10 +441,13 @@ class BookEServiceView extends GetView<BookEServiceController> {
                 ),
               ),
               Obx(() {
-                if (!controller.booking.value.canBookingAtSalon) return SizedBox();
+                if (!controller.booking.value.canBookingAtSalon)
+                  return const SizedBox();
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: Ui.getBoxDecoration(color: controller.getColor(controller.atSalon.value)),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: Ui.getBoxDecoration(
+                      color: controller.getColor(controller.atSalon.value)),
                   child: RadioListTile(
                     activeColor: Get.theme.primaryColor,
                     value: true,
@@ -347,19 +455,26 @@ class BookEServiceView extends GetView<BookEServiceController> {
                     onChanged: (value) {
                       controller.booking.update((val) {
                         val!.address = null;
-                        Get.find<TabBarController>(tag: 'addresses').selectedId = RxString("");
+                        Get.find<TabBarController>(tag: 'addresses')
+                            .selectedId = RxString("");
                       });
                       controller.toggleAtSalon(value);
                     },
-                    title: Text("At Salon".tr, style: controller.getTextTheme(controller.atSalon.value)).paddingSymmetric(vertical: 20),
+                    title: Text("At Salon".tr,
+                            style: controller
+                                .getTextTheme(controller.atSalon.value))
+                        .paddingSymmetric(vertical: 20),
                   ),
                 );
               }),
               Obx(() {
-                if (!controller.booking.value.canBookingAtCustomerAddress) return SizedBox();
+                if (!controller.booking.value.canBookingAtCustomerAddress)
+                  return const SizedBox();
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  decoration: Ui.getBoxDecoration(color: controller.getColor(!controller.atSalon.value)),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: Ui.getBoxDecoration(
+                      color: controller.getColor(!controller.atSalon.value)),
                   child: RadioListTile(
                     activeColor: Get.theme.primaryColor,
                     value: false,
@@ -367,19 +482,25 @@ class BookEServiceView extends GetView<BookEServiceController> {
                     onChanged: (value) {
                       controller.toggleAtSalon(value);
                     },
-                    title: Text("At your address".tr, style: controller.getTextTheme(!controller.atSalon.value)).paddingSymmetric(vertical: 20),
+                    title: Text("At your address".tr,
+                            style: controller
+                                .getTextTheme(!controller.atSalon.value))
+                        .paddingSymmetric(vertical: 20),
                   ),
                 );
               }),
               Obx(() {
                 return AnimatedOpacity(
                   opacity: controller.atSalon.value ? 0 : 1,
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   child: AnimatedContainer(
                     height: controller.atSalon.value ? 0 : 230,
-                    duration: Duration(milliseconds: 300),
-                    margin: EdgeInsets.symmetric(horizontal: 20, vertical: controller.atSalon.value ? 0 : 10),
-                    padding: EdgeInsets.symmetric(vertical: controller.atSalon.value ? 0 : 20),
+                    duration: const Duration(milliseconds: 300),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: controller.atSalon.value ? 0 : 10),
+                    padding: EdgeInsets.symmetric(
+                        vertical: controller.atSalon.value ? 0 : 20),
                     decoration: Ui.getBoxDecoration(),
                     child: ListView(
                       primary: false,
@@ -387,21 +508,27 @@ class BookEServiceView extends GetView<BookEServiceController> {
                       children: [
                         Row(
                           children: [
-                            SizedBox(width: 20),
-                            Expanded(child: Text("Your Addresses".tr, style: Get.textTheme.bodyLarge)),
-                            SizedBox(width: 4),
+                            const SizedBox(width: 20),
+                            Expanded(
+                                child: Text("Your Addresses".tr,
+                                    style: Get.textTheme.bodyLarge)),
+                            const SizedBox(width: 4),
                             MaterialButton(
-                              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 14),
                               onPressed: () {
                                 Get.toNamed(Routes.SETTINGS_ADDRESS_PICKER);
                               },
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                              color: Get.theme.colorScheme.secondary.withOpacity(0.1),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8)),
+                              color: Get.theme.colorScheme.secondary
+                                  .withOpacity(0.1),
                               child: Wrap(
                                 crossAxisAlignment: WrapCrossAlignment.center,
                                 spacing: 6,
                                 children: [
-                                  Text("New".tr, style: Get.textTheme.titleMedium),
+                                  Text("New".tr,
+                                      style: Get.textTheme.titleMedium),
                                   Icon(
                                     Icons.my_location,
                                     color: Get.theme.colorScheme.secondary,
@@ -411,10 +538,10 @@ class BookEServiceView extends GetView<BookEServiceController> {
                               ),
                               elevation: 0,
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                           ],
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Obx(() {
                           if (controller.addresses.isEmpty) {
                             return TabBarLoadingWidget();
@@ -422,8 +549,10 @@ class BookEServiceView extends GetView<BookEServiceController> {
                             return TabBarWidget(
                               initialSelectedId: "",
                               tag: 'addresses',
-                              tabs: List.generate(controller.addresses.length, (index) {
-                                final _address = controller.addresses.elementAt(index);
+                              tabs: List.generate(controller.addresses.length,
+                                  (index) {
+                                final _address =
+                                    controller.addresses.elementAt(index);
                                 return ChipWidget(
                                   tag: 'addresses',
                                   text: _address.getDescription(),
@@ -432,25 +561,30 @@ class BookEServiceView extends GetView<BookEServiceController> {
                                     controller.booking.update((val) {
                                       val!.address = _address;
                                     });
-                                    Get.find<SettingsService>().address.value = _address;
+                                    Get.find<SettingsService>().address.value =
+                                        _address;
                                   },
                                 );
                               }),
                             );
                           }
                         }),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         Row(
                           children: [
-                            SizedBox(width: 20),
-                            Icon(Icons.place_outlined, color: Get.theme.focusColor),
-                            SizedBox(width: 15),
+                            const SizedBox(width: 20),
+                            Icon(Icons.place_outlined,
+                                color: Get.theme.focusColor),
+                            const SizedBox(width: 15),
                             Expanded(
                               child: Obx(() {
-                                return Text(controller.booking.value.address?.address ?? "Select an address".tr, style: Get.textTheme.bodyMedium);
+                                return Text(
+                                    controller.booking.value.address?.address ??
+                                        "Select an address".tr,
+                                    style: Get.textTheme.bodyMedium);
                               }),
                             ),
-                            SizedBox(width: 20),
+                            const SizedBox(width: 20),
                           ],
                         ),
                       ],
@@ -460,12 +594,14 @@ class BookEServiceView extends GetView<BookEServiceController> {
               }),
               TextFieldWidget(
                 onChanged: (input) => controller.booking.value.hint = input,
-                hintText: "Is there anything else you would like us to know?".tr,
+                hintText:
+                    "Is there anything else you would like us to know?".tr,
                 labelText: "Hint".tr,
                 iconData: Icons.description_outlined,
               ),
               TextFieldWidget(
-                onChanged: (input) => controller.booking.value.coupon?.code = input,
+                onChanged: (input) =>
+                    controller.booking.value.coupon?.code = input,
                 hintText: "COUPON01".tr,
                 labelText: "Coupon Code".tr,
                 iconData: Icons.confirmation_number_outlined,
@@ -474,13 +610,14 @@ class BookEServiceView extends GetView<BookEServiceController> {
                   onPressed: () {
                     controller.validateCoupon();
                   },
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8)),
                   color: Get.theme.focusColor.withOpacity(0.1),
                   child: Text("Apply".tr, style: Get.textTheme.bodyLarge),
                   elevation: 0,
                 ).marginSymmetric(vertical: 4),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
             ],
           ),
         ));
@@ -488,12 +625,15 @@ class BookEServiceView extends GetView<BookEServiceController> {
 
   Widget buildBlockButtonWidget(Booking _booking) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
         color: Get.theme.primaryColor,
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(20)),
         boxShadow: [
-          BoxShadow(color: Get.theme.focusColor.withOpacity(0.1), blurRadius: 10, offset: Offset(0, -5)),
+          BoxShadow(
+              color: Get.theme.focusColor.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, -5)),
         ],
       ),
       child: Obx(() {
@@ -514,23 +654,28 @@ class BookEServiceView extends GetView<BookEServiceController> {
                         ),
                       ),
                     ),
-                    Icon(Icons.arrow_forward_ios, color: Get.theme.primaryColor, size: 20)
+                    Icon(Icons.arrow_forward_ios,
+                        color: Get.theme.primaryColor, size: 20)
                   ],
                 ),
                 color: Get.theme.colorScheme.secondary,
-                onPressed: (
-                    controller.booking.value.bookingAt != null
-                    && (!(controller.booking.value.address?.isUnknown() ?? true) || controller.booking.value.canBookingAtSalon)
-                    && Get.isRegistered<TabBarController>(tag: 'hours')
-                    && Get.find<TabBarController>(tag: 'hours').initialized
-                    && Get.find<TabBarController>(tag: 'hours').selectedId.value != "")
+                onPressed: (controller.booking.value.bookingAt != null &&
+                        (!(controller.booking.value.address?.isUnknown() ??
+                                true) ||
+                            controller.booking.value.canBookingAtSalon) &&
+                        Get.isRegistered<TabBarController>(tag: 'hours') &&
+                        Get.find<TabBarController>(tag: 'hours').initialized &&
+                        Get.find<TabBarController>(tag: 'hours')
+                                .selectedId
+                                .value !=
+                            "")
                     ? () async {
                         await Get.toNamed(Routes.BOOKING_SUMMARY);
                       }
                     : null,
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 20),
             Wrap(
               direction: Axis.vertical,
               spacing: 2,
@@ -539,7 +684,10 @@ class BookEServiceView extends GetView<BookEServiceController> {
                   "Subtotal".tr,
                   style: Get.textTheme.bodySmall,
                 ),
-                Ui.getPrice(controller.booking.value.getSubtotal() - controller.booking.value.getCouponValue(), style: Get.textTheme.titleLarge),
+                Ui.getPrice(
+                    controller.booking.value.getSubtotal() -
+                        controller.booking.value.getCouponValue(),
+                    style: Get.textTheme.titleLarge),
               ],
             )
           ],

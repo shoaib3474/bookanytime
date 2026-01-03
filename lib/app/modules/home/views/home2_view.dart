@@ -9,10 +9,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/ui.dart';
 import '../../../models/slide_model.dart';
 import '../../../providers/laravel_provider.dart';
 import '../../../routes/app_routes.dart';
+import '../../../services/auth_service.dart';
 import '../../../services/settings_service.dart';
 import '../../global_widgets/address_widget.dart';
 import '../../global_widgets/home_search_bar_widget.dart';
@@ -24,6 +24,8 @@ import '../widgets/recommended_carousel_widget.dart';
 import '../widgets/slide_item_widget.dart';
 
 class Home2View extends GetView<HomeController> {
+  const Home2View({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,113 +40,197 @@ class Home2View extends GetView<HomeController> {
             shrinkWrap: false,
             slivers: <Widget>[
               SliverAppBar(
-                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-                expandedHeight: 300,
-                elevation: 0.5,
+                backgroundColor: Get.theme.primaryColor,
+                expandedHeight: 240,
+                pinned: true,
                 floating: true,
-                iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-                title: Text(
-                  Get.find<SettingsService>().setting.value.appName ?? "",
-                  style: Get.textTheme.titleLarge,
-                ),
-                centerTitle: true,
+                elevation: 0,
+                iconTheme: IconThemeData(color: Get.theme.hintColor),
                 automaticallyImplyLeading: false,
-                leading: new IconButton(
-                  icon: new Icon(Icons.sort, color: Colors.black87),
+                leading: IconButton(
+                  icon: Icon(Icons.menu, color: Get.theme.hintColor),
                   onPressed: () => {Scaffold.of(context).openDrawer()},
                 ),
-                actions: [NotificationsButtonWidget()],
-                bottom: HomeSearchBarWidget(),
+                title: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    Get.find<SettingsService>().setting.value.appName ?? "",
+                    style: Get.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                centerTitle: false,
+                actions: const [NotificationsButtonWidget()],
                 flexibleSpace: FlexibleSpaceBar(
-                  collapseMode: CollapseMode.parallax,
-                  background: Obx(() {
-                    return Stack(
-                      alignment: controller.slider.isEmpty
-                          ? AlignmentDirectional.center
-                          : Ui.getAlignmentDirectional(controller.slider.elementAt(controller.currentSlide.value).textPosition),
-                      children: <Widget>[
-                        CarouselSlider(
-                          options: CarouselOptions(
-                            autoPlay: true,
-                            autoPlayInterval: Duration(seconds: 7),
-                            height: 360,
-                            viewportFraction: 1.0,
-                            onPageChanged: (index, reason) {
-                              controller.currentSlide.value = index;
-                            },
-                          ),
-                          items: controller.slider.map((Slide slide) {
-                            return SlideItemWidget(slide: slide);
-                          }).toList(),
-                        ),
-                        Container(
-                          margin: EdgeInsets.symmetric(vertical: 70, horizontal: 20),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: controller.slider.map((Slide slide) {
-                              return Container(
-                                width: 20.0,
-                                height: 5.0,
-                                margin: EdgeInsets.symmetric(vertical: 20.0, horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    color: controller.currentSlide.value == controller.slider.indexOf(slide)
-                                        ? slide.indicatorColor
-                                        : slide.indicatorColor.withOpacity(0.4)),
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
-                    );
-                  }),
-                ).marginOnly(bottom: 42),
+                  collapseMode: CollapseMode.pin,
+                  background: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 56, 16, 12),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          /// Greeting with user name
+                          Obx(() {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Text(
+                                "Welcome, ${Get.find<AuthService>().user.value.name ?? 'Guest'}"
+                                    .tr,
+                                style: Get.textTheme.headlineMedium?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Get.theme.hintColor,
+                                ),
+                              ),
+                            );
+                          }),
+
+                          /// Address Widget
+                          AddressWidget(),
+
+                          const SizedBox(height: 12),
+
+                          /// Search bar
+                          HomeSearchBarWidget(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
               ),
               SliverToBoxAdapter(
-                child: Wrap(
-                  children: [
-                    AddressWidget(),
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                      child: Row(
-                        children: [
-                          Expanded(child: Text("Recommended for you".tr, style: Get.textTheme.headlineSmall)),
-                          MaterialButton(
-                            onPressed: () {
-                              Get.toNamed(Routes.MAPS);
-                            },
-                            shape: StadiumBorder(),
-                            color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.titleMedium),
-                            elevation: 0,
-                          ),
-                        ],
+                child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    children: [
+                      /// Categories Section
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Categories".tr,
+                                style: Get.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Get.theme.hintColor,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.CATEGORIES);
+                              },
+                              child: Text(
+                                "See All".tr,
+                                style: Get.textTheme.bodySmall?.copyWith(
+                                  color: Get.theme.colorScheme.secondary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    RecommendedCarouselWidget(),
-                    Container(
-                      color: Get.theme.primaryColor,
-                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                      child: Row(
-                        children: [
-                          Expanded(child: Text("Categories".tr, style: Get.textTheme.headlineSmall)),
-                          MaterialButton(
-                            onPressed: () {
-                              Get.toNamed(Routes.CATEGORIES);
-                            },
-                            shape: StadiumBorder(),
-                            color: Get.theme.colorScheme.secondary.withOpacity(0.1),
-                            child: Text("View All".tr, style: Get.textTheme.titleMedium),
-                            elevation: 0,
-                          ),
-                        ],
+                      CategoriesCarouselWidget(),
+
+                      const SizedBox(height: 20),
+
+                      /// Promotional Banner Carousel
+                      Obx(() {
+                        if (controller.slider.isEmpty) {
+                          return const SizedBox(height: 0);
+                        }
+                        return Column(
+                          children: [
+                            CarouselSlider(
+                              options: CarouselOptions(
+                                autoPlay: true,
+                                autoPlayInterval: const Duration(seconds: 7),
+                                autoPlayAnimationDuration:
+                                    const Duration(milliseconds: 800),
+                                autoPlayCurve: Curves.fastOutSlowIn,
+                                pauseAutoPlayOnTouch: true,
+                                aspectRatio: 16 / 9,
+                                viewportFraction: 0.9,
+                                height: 180,
+                                onPageChanged: (index, reason) {
+                                  controller.currentSlide.value = index;
+                                },
+                              ),
+                              items: controller.slider.map((Slide slide) {
+                                return SlideItemWidget(slide: slide);
+                              }).toList(),
+                            ),
+                            const SizedBox(height: 12),
+                            Obx(() {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: List.generate(
+                                  controller.slider.length,
+                                  (index) => Container(
+                                    width: 8,
+                                    height: 8,
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 4),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color:
+                                          controller.currentSlide.value == index
+                                              ? Get.theme.colorScheme.secondary
+                                              : Get.theme.colorScheme.secondary
+                                                  .withOpacity(0.4),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                          ],
+                        );
+                      }).paddingSymmetric(horizontal: 0, vertical: 8),
+
+                      const SizedBox(height: 20),
+
+                      /// Featured for you Section
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                "Featured for you".tr,
+                                style: Get.textTheme.headlineSmall?.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                  color: Get.theme.hintColor,
+                                ),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed(Routes.MAPS);
+                              },
+                              child: Text(
+                                "See All".tr,
+                                style: Get.textTheme.bodySmall?.copyWith(
+                                  color: Get.theme.colorScheme.secondary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    CategoriesCarouselWidget(),
-                    FeaturedCategoriesWidget(),
-                  ],
+                      RecommendedCarouselWidget(),
+
+                      const SizedBox(height: 20),
+
+                      FeaturedCategoriesWidget(),
+
+                      const SizedBox(height: 30),
+                    ],
+                  ),
                 ),
               ),
             ],
