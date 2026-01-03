@@ -7,9 +7,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../routes/app_routes.dart';
+import '../../services/location_service.dart';
 import '../../services/settings_service.dart';
+import '../../../common/ui.dart';
 
 class AddressWidget extends StatelessWidget {
   @override
@@ -27,9 +31,12 @@ class AddressWidget extends StatelessWidget {
               },
               child: Obx(() {
                 if (Get.find<SettingsService>().address.value.isUnknown()) {
-                  return Text("Please choose your address".tr, style: Get.textTheme.bodyLarge);
+                  return Text("Please choose your address".tr,
+                      style: Get.textTheme.bodyLarge);
                 }
-                return Text(Get.find<SettingsService>().address.value.address ?? '', style: Get.textTheme.bodyLarge);
+                return Text(
+                    Get.find<SettingsService>().address.value.address ?? '',
+                    style: Get.textTheme.bodyLarge);
               }),
             ),
           ),
@@ -37,11 +44,36 @@ class AddressWidget extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.gps_fixed),
             onPressed: () async {
-              Get.toNamed(Routes.SETTINGS_ADDRESS_PICKER);
+              await _getCurrentLocation(context);
             },
           )
         ],
       ),
     );
+  }
+
+  Future<void> _getCurrentLocation(BuildContext context) async {
+    try {
+      Get.showSnackbar(Ui.defaultSnackBar(message: "Getting your location...".tr));
+
+      Position? position =
+          await Get.find<LocationService>().getCurrentLocation();
+
+      if (position != null) {
+        Get.find<SettingsService>().address.update((val) {
+          val?.latitude = position.latitude;
+          val?.longitude = position.longitude;
+          val?.description = "My Current Location".tr;
+        });
+
+        Get.back();
+        Get.toNamed(Routes.SETTINGS_ADDRESS_PICKER);
+
+        Get.showSnackbar(
+            Ui.SuccessSnackBar(message: "Location updated successfully".tr));
+      }
+    } catch (e) {
+      Get.showSnackbar(Ui.ErrorSnackBar(message: "Error: ${e.toString()}".tr));
+    }
   }
 }

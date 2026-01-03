@@ -17,6 +17,7 @@ import 'app/routes/theme1_app_pages.dart';
 import 'app/services/auth_service.dart';
 import 'app/services/firebase_messaging_service.dart';
 import 'app/services/global_service.dart';
+import 'app/services/location_service.dart';
 import 'app/services/settings_service.dart';
 import 'app/services/translation_service.dart';
 import 'firebase_options.dart';
@@ -29,6 +30,7 @@ Future<void> initServices() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await Get.putAsync(() => AuthService().init());
+  await Get.putAsync(() => LocationService().init());
   await Get.putAsync(() => LaravelApiClient().init());
   await Get.putAsync(() => FirebaseProvider().init());
   await Get.putAsync(() => SettingsService().init());
