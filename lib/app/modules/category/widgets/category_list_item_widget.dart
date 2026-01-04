@@ -1,8 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 /*
  * File name: category_list_item_widget.dart
- * Last modified: 2023.01.26 at 18:26:28
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
+ * Last modified: 2026.01.04
+ * Author: Shoaib (Updated)
+ * Description: Modern List Item with ExpansionTile, shadow, and rounded corners
  */
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -10,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
 import '../../../routes/app_routes.dart';
 
@@ -19,74 +20,79 @@ class CategoryListItemWidget extends StatelessWidget {
   final String heroTag;
   final bool expanded;
 
-  CategoryListItemWidget({Key? key, required this.category, required this.heroTag, required this.expanded}) : super(key: key);
+  const CategoryListItemWidget(
+      {super.key,
+      required this.category,
+      required this.heroTag,
+      required this.expanded});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-      decoration: Ui.getBoxDecoration(
-        border: Border.fromBorderSide(BorderSide.none),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      decoration: BoxDecoration(
         color: category.color!.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: const [
+          BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 3))
+        ],
       ),
       child: Theme(
         data: Get.theme.copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
-          initiallyExpanded: this.expanded,
+          initiallyExpanded: expanded,
           expandedCrossAxisAlignment: CrossAxisAlignment.stretch,
+          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           title: InkWell(
-              highlightColor: Colors.transparent,
-              splashColor: Get.theme.colorScheme.secondary.withOpacity(0.08),
-              onTap: () {
-                Get.toNamed(Routes.CATEGORY, arguments: category);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    width: 52,
-                    height: 52,
-                    child: (category.image!.url.toLowerCase().endsWith('.svg')
-                        ? SvgPicture.network(
-                            category.image!.url,
-                            color: category.color,
-                          )
-                        : CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: category.image!.url,
-                            placeholder: (context, url) => Image.asset(
+            onTap: () => Get.toNamed(Routes.CATEGORY, arguments: category),
+            highlightColor: Colors.transparent,
+            splashColor: Get.theme.colorScheme.secondary.withOpacity(0.08),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 50,
+                  height: 50,
+                  child: category.image!.url.toLowerCase().endsWith('.svg')
+                      ? SvgPicture.network(category.image!.url,
+                          color: category.color)
+                      : CachedNetworkImage(
+                          imageUrl: category.image!.url,
+                          placeholder: (context, url) => Image.asset(
                               'assets/img/loading.gif',
-                              fit: BoxFit.cover,
-                            ),
-                            errorWidget: (context, url, error) => Icon(Icons.error_outline),
-                          )),
+                              fit: BoxFit.cover),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error_outline),
+                        ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    category.name ?? '',
+                    style: Get.textTheme.bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
                   ),
-                  SizedBox(width: 10),
-                  Expanded(
-                    child: Text(
-                      category.name ?? '',
-                      overflow: TextOverflow.fade,
-                      softWrap: false,
-                      style: Get.textTheme.bodyMedium,
-                    ),
-                  ),
-                ],
-              )),
+                ),
+              ],
+            ),
+          ),
           children: List.generate(category.subCategories?.length ?? 0, (index) {
-            var _category = category.subCategories!.elementAt(index);
+            var sub = category.subCategories!.elementAt(index);
             return GestureDetector(
-              onTap: () {
-                Get.toNamed(Routes.CATEGORY, arguments: _category);
-              },
+              onTap: () => Get.toNamed(Routes.CATEGORY, arguments: sub),
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 16),
-                child: Text(_category.name!, style: Get.textTheme.bodyLarge),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
                 decoration: BoxDecoration(
                   color: Get.theme.scaffoldBackgroundColor.withOpacity(0.2),
-                  border: Border(top: BorderSide(color: Get.theme.scaffoldBackgroundColor.withOpacity(0.3))
-                      //color: Get.theme.focusColor.withOpacity(0.2),
-                      ),
+                  border: Border(
+                    top: BorderSide(
+                        color:
+                            Get.theme.scaffoldBackgroundColor.withOpacity(0.3)),
+                  ),
+                ),
+                child: Text(
+                  sub.name!,
+                  style: Get.textTheme.bodyLarge,
                 ),
               ),
             );

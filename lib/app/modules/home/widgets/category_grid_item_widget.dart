@@ -1,16 +1,10 @@
-/*
- * File name: category_grid_item_widget.dart
- * Last modified: 2023.01.26 at 18:24:53
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
+// ignore_for_file: deprecated_member_use
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/ui.dart';
 import '../../../models/category_model.dart';
 import '../../../routes/app_routes.dart';
 
@@ -18,56 +12,63 @@ class CategoryGridItemWidget extends StatelessWidget {
   final Category category;
   final String heroTag;
 
-  CategoryGridItemWidget({Key? key, required this.category, required this.heroTag}) : super(key: key);
+  const CategoryGridItemWidget(
+      {super.key, required this.category, required this.heroTag});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      onTap: () => Get.toNamed(Routes.CATEGORY, arguments: category),
+      borderRadius: BorderRadius.circular(12),
+      splashColor: Get.theme.colorScheme.secondary.withOpacity(0.1),
       highlightColor: Colors.transparent,
-      splashColor: Get.theme.colorScheme.secondary.withOpacity(0.08),
-      onTap: () {
-        Get.toNamed(Routes.CATEGORY, arguments: category);
-      },
       child: Container(
-        decoration: Ui.getBoxDecoration(color: category.color!.withOpacity(0.10)),
+        decoration: BoxDecoration(
+          color: category.color!.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              decoration: new BoxDecoration(
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(5), topRight: Radius.circular(5)),
-              ),
-              child: (category.image!.url.toLowerCase().endsWith('.svg')
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Category Icon / Image
+            SizedBox(
+              height: 50,
+              child: category.image!.url.toLowerCase().endsWith('.svg')
                   ? SvgPicture.network(
                       category.image!.url,
                       color: category.color,
-                      height: 36,
-                    ).paddingAll(10)
+                    )
                   : CachedNetworkImage(
-                      height: 36,
-                      fit: BoxFit.fitHeight,
                       imageUrl: category.image!.url,
                       placeholder: (context, url) => Image.asset(
-                        'assets/img/loading.gif',
-                        fit: BoxFit.cover,
-                      ),
-                      errorWidget: (context, url, error) => Icon(Icons.error_outline),
-                    )),
+                          'assets/img/loading.gif',
+                          fit: BoxFit.cover),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error_outline),
+                    ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
+            const SizedBox(height: 8),
+
+            // Category Name
+            Flexible(
               child: Text(
                 category.name ?? '',
-                style: Get.textTheme.bodyLarge,
-                softWrap: false,
+                style: Get.textTheme.bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                textAlign: TextAlign.center,
               ),
-            )
+            ),
           ],
         ),
       ),
