@@ -1,14 +1,9 @@
-/*
- * File name: forgot_password_view.dart
- * Last modified: 2023.01.26 at 18:24:11
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
+// ignore_for_file: deprecated_member_use
 
+import 'package:bookanytime/app/modules/root/controllers/root_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/ui.dart';
 import '../../../models/setting_model.dart';
 import '../../../routes/app_routes.dart';
 import '../../../services/settings_service.dart';
@@ -22,124 +17,157 @@ class ForgotPasswordView extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.forgotPasswordFormKey = new GlobalKey<FormState>();
+    controller.forgotPasswordFormKey = GlobalKey<FormState>();
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Forgot Password".tr,
-            style: Get.textTheme.titleLarge?.merge(TextStyle(color: context.theme.primaryColor)),
+      backgroundColor: context.theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Get.theme.colorScheme.secondary,
+        title: Text(
+          "Forgot Password".tr,
+          textAlign: TextAlign.center,
+          style: Get.textTheme.titleLarge?.copyWith(
+            color: Get.theme.primaryColor.withOpacity(0.8),
           ),
-          centerTitle: true,
-          backgroundColor: Get.theme.colorScheme.secondary,
-          automaticallyImplyLeading: false,
-          elevation: 0,
         ),
-        body: Form(
-          key: controller.forgotPasswordFormKey,
-          child: ListView(
-            primary: true,
-            children: [
-              Stack(
-                alignment: AlignmentDirectional.bottomCenter,
-                children: [
-                  Container(
-                    height: 180,
-                    width: Get.width,
-                    decoration: BoxDecoration(
-                      color: Get.theme.colorScheme.secondary,
-                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(color: Get.theme.focusColor.withOpacity(0.2), blurRadius: 10, offset: Offset(0, 5)),
-                      ],
-                    ),
-                    margin: EdgeInsets.only(bottom: 50),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
-                        children: [
-                          Text(
-                            _settings.appName ?? "",
-                            style: Get.textTheme.titleLarge?.merge(TextStyle(color: Get.theme.primaryColor, fontSize: 24)),
-                          ),
-                          SizedBox(height: 5),
-                          Text(
-                            "Welcome to the best multi salons system!".tr,
-                            style: Get.textTheme.bodySmall?.merge(TextStyle(color: Get.theme.primaryColor)),
-                            textAlign: TextAlign.center,
-                          ),
-                          // Text("Fill the following credentials to login your account", style: Get.textTheme.bodySmall?.merge(TextStyle(color: Get.theme.primaryColor))),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: Ui.getBoxDecoration(
-                      radius: 14,
-                      border: Border.all(width: 5, color: Get.theme.primaryColor),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: Image.asset(
-                        'assets/icon/icon.png',
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                      ),
-                    ),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+          onPressed: () => Get.find<RootController>().changePageOutRoot(0),
+        ),
+      ),
+      body: Form(
+        key: controller.forgotPasswordFormKey,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            // 🔹 Header
+            Container(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 40),
+              decoration: BoxDecoration(
+                color: Get.theme.colorScheme.secondary,
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(24),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Get.theme.focusColor.withOpacity(0.15),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
                   ),
                 ],
               ),
-              Obx(() {
-                if (controller.loading.isTrue)
-                  return CircularLoadingWidget(height: 300);
-                else {
-                  return Column(
+              child: Column(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 12,
+                        ),
+                      ],
+                    ),
+                    child: Image.asset(
+                      'assets/icon/icon.png',
+                      width: 70,
+                      height: 70,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    _settings.appName ?? "",
+                    style: Get.textTheme.titleLarge?.copyWith(
+                      fontSize: 22,
+                      color: context.theme.primaryColor,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "Enter your email to receive a password reset link".tr,
+                    style: Get.textTheme.bodySmall?.copyWith(
+                      color: context.theme.primaryColor,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // 🔹 Form Card
+            Obx(() {
+              if (controller.loading.isTrue) {
+                return CircularLoadingWidget(height: 250);
+              }
+
+              return Card(
+                margin: const EdgeInsets.symmetric(horizontal: 20),
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       TextFieldWidget(
                         labelText: "Email Address".tr,
                         hintText: "johndoe@gmail.com".tr,
                         initialValue: controller.currentUser.value.email,
-                        onSaved: (input) => controller.currentUser.value.email = input,
-                        validator: (input) => !GetUtils.isEmail(input ?? '' ) ? "Should be a valid email".tr : null,
+                        onSaved: (input) =>
+                            controller.currentUser.value.email = input,
+                        validator: (input) => !GetUtils.isEmail(input ?? '')
+                            ? "Should be a valid email".tr
+                            : null,
                         iconData: Icons.alternate_email,
                       ),
+                      const SizedBox(height: 25),
                       BlockButtonWidget(
                         onPressed: controller.sendResetLink,
                         color: Get.theme.colorScheme.secondary,
                         text: Text(
                           "Send Reset Link".tr,
-                          style: Get.textTheme.titleLarge?.merge(TextStyle(color: Get.theme.primaryColor)),
+                          style: Get.textTheme.titleMedium?.copyWith(
+                            color: context.theme.primaryColor,
+                          ),
                         ),
-                      ).paddingSymmetric(vertical: 35, horizontal: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Get.offAllNamed(Routes.REGISTER);
-                            },
-                            child: Text("You don't have an account?".tr),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                            onPressed: () {
-                              Get.offAllNamed(Routes.REGISTER);
-                            },
-                            child: Text("You remember my password!".tr),
-                          ),
-                        ],
                       ),
                     ],
-                  );
-                }
-              }),
-            ],
-          ),
-        ));
+                  ),
+                ),
+              );
+            }),
+
+            const SizedBox(height: 25),
+
+            // 🔹 Footer Links
+            Column(
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Get.offAllNamed(Routes.REGISTER);
+                  },
+                  child: Text("You don't have an account?".tr),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Get.offAllNamed(Routes.LOGIN);
+                  },
+                  child: Text("You remember my password!".tr),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
   }
 }

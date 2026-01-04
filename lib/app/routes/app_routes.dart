@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 /*
  * File name: app_routes.dart
  * Last modified: 2022.02.10 at 22:35:55

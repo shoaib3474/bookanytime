@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 /*
  * File name: laravel_provider.dart
  * Last modified: 2023.01.26 at 18:14:38
@@ -43,9 +45,10 @@ import 'api_provider.dart';
 
 class LaravelApiClient extends GetxService with ApiClient {
   LaravelApiClient() {
-    this.baseUrl = this.globalService.global.value.laravelBaseUrl ?? '';
+    baseUrl = globalService.global.value.laravelBaseUrl ?? '';
   }
 
+  @override
   Future<LaravelApiClient> init() async {
     super.init();
     return this;
@@ -56,15 +59,18 @@ class LaravelApiClient extends GetxService with ApiClient {
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Slide>((obj) => Slide.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Slide>((obj) => Slide.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<User> getUser(User user) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getUser() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getUser() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
@@ -78,7 +84,7 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return User.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -94,7 +100,7 @@ class LaravelApiClient extends GetxService with ApiClient {
       response.data['data']['auth'] = true;
       return User.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -110,7 +116,7 @@ class LaravelApiClient extends GetxService with ApiClient {
       response.data['data']['auth'] = true;
       return User.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -118,7 +124,7 @@ class LaravelApiClient extends GetxService with ApiClient {
     Uri _uri = getApiBaseUri("send_reset_link_email");
 
     // to remove other attributes from the user object
-    user = new User(email: user.email);
+    user = User(email: user.email);
     var response = await httpClient.postUri(
       _uri,
       data: json.encode(user.toJson()),
@@ -127,18 +133,20 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return true;
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<User> updateUser(User user) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ updateUser() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ updateUser() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("users/${user.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("users/${user.id}")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.postUri(
       _uri,
@@ -149,18 +157,20 @@ class LaravelApiClient extends GetxService with ApiClient {
       response.data['data']['auth'] = true;
       return User.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<bool> deleteUser(User user) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ deleteUser() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ deleteUser() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("users").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("users").replace(queryParameters: _queryParameters);
     var response = await httpClient.deleteUri(
       _uri,
       options: optionsNetwork,
@@ -168,13 +178,14 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<Address>> getAddresses() async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getAddresses() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getAddresses() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
@@ -183,13 +194,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'id',
       'sortedBy': 'desc',
     };
-    Uri _uri = getApiBaseUri("addresses").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("addresses").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Address>((obj) => Address.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Address>((obj) => Address.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -197,7 +211,8 @@ class LaravelApiClient extends GetxService with ApiClient {
     final _address = Get.find<SettingsService>().address.value;
     // TODO get Only Recommended
     var _queryParameters = {
-      'only': 'id;name;has_media;media;total_reviews;rate;salonLevel;distance;closed',
+      'only':
+          'id;name;has_media;media;total_reviews;rate;salonLevel;distance;closed',
       'with': 'salonLevel',
       'limit': '6',
     };
@@ -205,19 +220,23 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("salons").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("salons").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Salon>((obj) => Salon.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Salon>((obj) => Salon.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<Salon>> getNearSalons(LatLng latLng, LatLng areaLatLng) async {
     var _queryParameters = {
-      'only': 'id;name;has_media;media;total_reviews;rate;salonLevel;address;distance;closed',
+      'only':
+          'id;name;has_media;media;total_reviews;rate;salonLevel;address;distance;closed',
       'with': 'salonLevel;address',
       'limit': '6',
     };
@@ -226,17 +245,21 @@ class LaravelApiClient extends GetxService with ApiClient {
     _queryParameters['areaLat'] = areaLatLng.latitude.toString();
     _queryParameters['areaLon'] = areaLatLng.longitude.toString();
 
-    Uri _uri = getApiBaseUri("salons").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("salons").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Salon>((obj) => Salon.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Salon>((obj) => Salon.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getAllEServicesWithPagination(String categoryId, int page) async {
+  Future<List<EService>> getAllEServicesWithPagination(
+      String categoryId, int page) async {
     final _address = Get.find<SettingsService>().address.value;
     var _queryParameters = {
       'with': 'categories;options;options.media;salon.address',
@@ -250,17 +273,21 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> searchEServices(String? keywords, List<String> categories, int page) async {
+  Future<List<EService>> searchEServices(
+      String? keywords, List<String> categories, int page) async {
     final _address = Get.find<SettingsService>().address.value;
     // TODO Pagination
     var _queryParameters = {
@@ -273,19 +300,23 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<Favorite>> getFavoritesEServices() async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getFavoritesEServices() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getFavoritesEServices() ]");
     }
     var _queryParameters = {
       'with': 'eService;options;eService.salon',
@@ -295,24 +326,29 @@ class LaravelApiClient extends GetxService with ApiClient {
       'sortBy': 'desc',
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("favorites").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("favorites").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Favorite>((obj) => Favorite.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Favorite>((obj) => Favorite.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Favorite> addFavoriteEService(Favorite favorite) async {
     if (!authService.isAuth) {
-      throw new Exception("You must have an account to be able to add services to favorite".tr + "[ addFavoriteEService() ]");
+      throw Exception(
+          "${"You must have an account to be able to add services to favorite".tr}[ addFavoriteEService() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("favorites").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("favorites").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.postUri(
       _uri,
@@ -323,18 +359,20 @@ class LaravelApiClient extends GetxService with ApiClient {
       response.data['data']['auth'] = true;
       return Favorite.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<bool> removeFavoriteEService(Favorite favorite) async {
     if (!authService.isAuth) {
-      throw new Exception("You must have an account to be able to add services to favorite".tr + "[ removeFavoriteEService() ]");
+      throw Exception(
+          "${"You must have an account to be able to add services to favorite".tr}[ removeFavoriteEService() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("favorites/1").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("favorites/1").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.deleteUri(
       _uri,
@@ -344,7 +382,7 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -355,13 +393,14 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (authService.isAuth) {
       _queryParameters['api_token'] = authService.apiToken;
     }
-    Uri _uri = getApiBaseUri("e_services/$id").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("e_services/$id")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return EService.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -369,28 +408,31 @@ class LaravelApiClient extends GetxService with ApiClient {
     const _queryParameters = {
       'with': 'salonLevel;availabilityHours;users;taxes;address',
     };
-    Uri _uri = getApiBaseUri("salons/$salonId").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("salons/$salonId")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return Salon.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List> getAvailabilityHours(String salonId, DateTime date, String? employeeId) async {
+  Future<List> getAvailabilityHours(
+      String salonId, DateTime date, String? employeeId) async {
     var _queryParameters = {
       'date': DateFormat('y-MM-dd').format(date),
       'employee_id': employeeId ?? '0',
     };
-    Uri _uri = getApiBaseUri("availability_hours/$salonId").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("availability_hours/$salonId")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -399,13 +441,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'with': 'salonReviews;salonReviews.booking;salonReviews.booking.user',
       'only': 'salonReviews',
     };
-    Uri _uri = getApiBaseUri("salons/$salonId").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("salons/$salonId")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data']['salon_reviews'].map<Review>((obj) => Review.fromJson(obj)).toList();
+      return response.data['data']['salon_reviews']
+          .map<Review>((obj) => Review.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -417,13 +462,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'updated_at',
       'sortedBy': 'desc',
     };
-    Uri _uri = getApiBaseUri("galleries").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("galleries").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Gallery>((obj) => Gallery.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Gallery>((obj) => Gallery.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -434,13 +482,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'updated_at',
       'sortedBy': 'desc',
     };
-    Uri _uri = getApiBaseUri("awards").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("awards").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Award>((obj) => Award.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Award>((obj) => Award.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -451,39 +502,50 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'updated_at',
       'sortedBy': 'desc',
     };
-    Uri _uri = getApiBaseUri("experiences").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("experiences").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Experience>((obj) => Experience.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Experience>((obj) => Experience.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getSalonFeaturedEServices(String salonId, List<String> categories, int page) async {
+  Future<List<EService>> getSalonFeaturedEServices(
+      String salonId, List<String> categories, int page) async {
     var _queryParameters = {
-      'with': 'categories;optionGroups;optionGroups.options;optionGroups.options.media',
-      'search': 'categories.id:${categories.join(',')};salon_id:$salonId;featured:1',
+      'with':
+          'categories;optionGroups;optionGroups.options;optionGroups.options.media',
+      'search':
+          'categories.id:${categories.join(',')};salon_id:$salonId;featured:1',
       'searchFields': 'categories.id:in;salon_id:=;featured:=',
       'searchJoin': 'and',
       'limit': '4',
       'offset': ((page - 1) * 4).toString()
     };
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getSalonPopularEServices(String salonId, List<String> categories, int page) async {
+  Future<List<EService>> getSalonPopularEServices(
+      String salonId, List<String> categories, int page) async {
     // TODO popular eServices
     var _queryParameters = {
-      'with': 'categories;optionGroups;optionGroups.options;optionGroups.options.media',
+      'with':
+          'categories;optionGroups;optionGroups.options;optionGroups.options.media',
       'search': 'categories.id:${categories.join(',')};salon_id:$salonId',
       'searchFields': 'categories.id:in;salon_id:=',
       'searchJoin': 'and',
@@ -491,19 +553,24 @@ class LaravelApiClient extends GetxService with ApiClient {
       'limit': '4',
       'offset': ((page - 1) * 4).toString()
     };
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getSalonAvailableEServices(String salonId, List<String> categories, int page) async {
+  Future<List<EService>> getSalonAvailableEServices(
+      String salonId, List<String> categories, int page) async {
     var _queryParameters = {
-      'with': 'categories;optionGroups;optionGroups.options;optionGroups.options.media',
+      'with':
+          'categories;optionGroups;optionGroups.options;optionGroups.options.media',
       'search': 'categories.id:${categories.join(',')};salon_id:$salonId',
       'searchFields': 'categories.id:in;salon_id:=',
       'searchJoin': 'and',
@@ -511,20 +578,25 @@ class LaravelApiClient extends GetxService with ApiClient {
       'limit': '4',
       'offset': ((page - 1) * 4).toString()
     };
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getSalonMostRatedEServices(String salonId, List<String> categories, int page) async {
+  Future<List<EService>> getSalonMostRatedEServices(
+      String salonId, List<String> categories, int page) async {
     var _queryParameters = {
       //'only': 'id;name;price;discount_price;price_unit;duration;has_media;total_reviews;rate',
-      'with': 'categories;optionGroups;optionGroups.options;optionGroups.options.media',
+      'with':
+          'categories;optionGroups;optionGroups.options;optionGroups.options.media',
       'search': 'categories.id:${categories.join(',')};salon_id:$salonId',
       'searchFields': 'categories.id:in;salon_id:=',
       'searchJoin': 'and',
@@ -532,44 +604,59 @@ class LaravelApiClient extends GetxService with ApiClient {
       'limit': '4',
       'offset': ((page - 1) * 4).toString()
     };
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<User>> getSalonEmployees(String salonId) async {
-    var _queryParameters = {'with': 'users', 'only': 'users;users.id;users.name;users.email;users.phone_number;users.device_token'};
-    Uri _uri = getApiBaseUri("salons/$salonId").replace(queryParameters: _queryParameters);
+    var _queryParameters = {
+      'with': 'users',
+      'only':
+          'users;users.id;users.name;users.email;users.phone_number;users.device_token'
+    };
+    Uri _uri = getApiBaseUri("salons/$salonId")
+        .replace(queryParameters: _queryParameters);
     printUri(StackTrace.current, _uri);
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data']['users'].map<User>((obj) => User.fromJson(obj)).toList();
+      return response.data['data']['users']
+          .map<User>((obj) => User.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getSalonEServices(String salonId, List<String> categories, int page) async {
+  Future<List<EService>> getSalonEServices(
+      String salonId, List<String> categories, int page) async {
     var _queryParameters = {
-      'with': 'categories;optionGroups;optionGroups.options;optionGroups.options.media',
+      'with':
+          'categories;optionGroups;optionGroups.options;optionGroups.options.media',
       'search': 'categories.id:${categories.join(',')};salon_id:$salonId',
       'searchFields': 'categories.id:in;salon_id:=',
       'searchJoin': 'and',
       'limit': '4',
       'offset': ((page - 1) * 4).toString()
     };
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -582,13 +669,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'sortBy': 'desc',
       'limit': '10'
     };
-    Uri _uri = getApiBaseUri("e_service_reviews").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("e_service_reviews")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Review>((obj) => Review.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Review>((obj) => Review.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -596,23 +686,28 @@ class LaravelApiClient extends GetxService with ApiClient {
     // "https://beauty-salons.smartersvision.com/api/option_groups?with=options;options.media&only=id;name;allow_multiple;options.id;options.name;options.description;options.price;options.option_group_id;options.e_service_id;options.media&search=options.e_service_id:1&searchFields=options.e_service_id:=&orderBy=name&sortBy=desc"
     var _queryParameters = {
       'with': 'options;options.media',
-      'only': 'id;name;allow_multiple;options.id;options.name;options.description;options.price;options.option_group_id;options.e_service_id;options.media',
+      'only':
+          'id;name;allow_multiple;options.id;options.name;options.description;options.price;options.option_group_id;options.e_service_id;options.media',
       'search': "options.e_service_id:$eServiceId",
       'searchFields': 'options.e_service_id:=',
       'orderBy': 'name',
       'sortBy': 'desc'
     };
-    Uri _uri = getApiBaseUri("option_groups").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("option_groups")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<OptionGroup>((obj) => OptionGroup.fromJson(obj)).toList();
+      return response.data['data']
+          .map<OptionGroup>((obj) => OptionGroup.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getFeaturedEServices(String categoryId, int page) async {
+  Future<List<EService>> getFeaturedEServices(
+      String categoryId, int page) async {
     final _address = Get.find<SettingsService>().address.value;
     var _queryParameters = {
       //'only': 'id;name;price;discount_price;price_unit;duration;has_media;total_reviews;rate',
@@ -627,17 +722,21 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getPopularEServices(String categoryId, int page) async {
+  Future<List<EService>> getPopularEServices(
+      String categoryId, int page) async {
     final _address = Get.find<SettingsService>().address.value;
     var _queryParameters = {
       //'only': 'id;name;price;discount_price;price_unit;duration;has_media;total_reviews;rate',
@@ -652,17 +751,21 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getMostRatedEServices(String categoryId, int page) async {
+  Future<List<EService>> getMostRatedEServices(
+      String categoryId, int page) async {
     final _address = Get.find<SettingsService>().address.value;
     var _queryParameters = {
       //'only': 'id;name;price;discount_price;price_unit;duration;has_media;total_reviews;rate',
@@ -677,17 +780,21 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<List<EService>> getAvailableEServices(String categoryId, int page) async {
+  Future<List<EService>> getAvailableEServices(
+      String categoryId, int page) async {
     final _address = Get.find<SettingsService>().address.value;
     var _queryParameters = {
       'with': 'salon;salon.address;categories',
@@ -701,13 +808,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("e_services").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<EService>((obj) => EService.fromJson(obj)).toList();
+      return response.data['data']
+          .map<EService>((obj) => EService.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -716,13 +826,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'order',
       'sortBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("categories").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("categories").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Category>((obj) => Category.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Category>((obj) => Category.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -732,13 +845,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'order',
       'sortBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("categories").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("categories").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Category>((obj) => Category.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Category>((obj) => Category.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -749,13 +865,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'order',
       'sortBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("categories").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("categories").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Category>((obj) => Category.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Category>((obj) => Category.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -766,13 +885,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'order',
       'sortBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("categories").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("categories").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Category>((obj) => Category.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Category>((obj) => Category.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -790,13 +912,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       _queryParameters['myLat'] = _address.latitude.toString();
       _queryParameters['myLon'] = _address.longitude.toString();
     }
-    Uri _uri = getApiBaseUri("categories").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("categories").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Category>((obj) => Category.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Category>((obj) => Category.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -810,13 +935,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'limit': '4',
       'offset': ((page - 1) * 4).toString()
     };
-    Uri _uri = getApiBaseUri("bookings").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("bookings").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Booking>((obj) => Booking.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Booking>((obj) => Booking.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -826,28 +954,33 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'order',
       'sortedBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("booking_statuses").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("booking_statuses")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<BookingStatus>((obj) => BookingStatus.fromJson(obj)).toList();
+      return response.data['data']
+          .map<BookingStatus>((obj) => BookingStatus.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Booking> getBooking(String bookingId) async {
     var _queryParameters = {
-      'with': 'bookingStatus;user;employee;payment;payment.paymentMethod;payment.paymentStatus',
+      'with':
+          'bookingStatus;user;employee;payment;payment.paymentMethod;payment.paymentStatus',
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("bookings/${bookingId}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("bookings/${bookingId}")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return Booking.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -857,72 +990,86 @@ class LaravelApiClient extends GetxService with ApiClient {
       'code': booking.coupon?.code ?? '',
       'e_services_id': booking.eServices!.map((e) => e.id).join(","),
       'salon_id': booking.salon?.id ?? '',
-      'categories_id': booking.eServices!.expand((element) => element.categories! + element.subCategories!).map((e) => e.id).join(","),
+      'categories_id': booking.eServices!
+          .expand((element) => element.categories! + element.subCategories!)
+          .map((e) => e.id)
+          .join(","),
     };
-    Uri _uri = getApiBaseUri("coupons").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("coupons").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return Coupon.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Booking> updateBooking(Booking booking) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ updateBooking() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ updateBooking() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("bookings/${booking.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("bookings/${booking.id}")
+        .replace(queryParameters: _queryParameters);
 
-    var response = await httpClient.putUri(_uri, data: booking.toJson(), options: optionsNetwork);
+    var response = await httpClient.putUri(_uri,
+        data: booking.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Booking.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Booking> addBooking(Booking booking) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ addBooking() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ addBooking() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("bookings").replace(queryParameters: _queryParameters);
-    var response = await httpClient.postUri(_uri, data: booking.toJson(), options: optionsNetwork);
+    Uri _uri =
+        getApiBaseUri("bookings").replace(queryParameters: _queryParameters);
+    var response = await httpClient.postUri(_uri,
+        data: booking.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Booking.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Review> addReview(Review review) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ addReview() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ addReview() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("salon_reviews").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("salon_reviews")
+        .replace(queryParameters: _queryParameters);
 
     Get.log(review.toJson().toString());
-    var response = await httpClient.postUri(_uri, data: review.toJson(), options: optionsNetwork);
+    var response = await httpClient.postUri(_uri,
+        data: review.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Review.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<PaymentMethod>> getPaymentMethods() async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getPaymentMethods() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getPaymentMethods() ]");
     }
     var _queryParameters = {
       'with': 'media',
@@ -932,87 +1079,103 @@ class LaravelApiClient extends GetxService with ApiClient {
       'sortBy': 'asc',
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("payment_methods").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("payment_methods")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<PaymentMethod>((obj) => PaymentMethod.fromJson(obj)).toList();
+      return response.data['data']
+          .map<PaymentMethod>((obj) => PaymentMethod.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<Wallet>> getWallets() async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getWallets() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getWallets() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("wallets").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("wallets").replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Wallet>((obj) => Wallet.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Wallet>((obj) => Wallet.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Wallet> createWallet(Wallet _wallet) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ createWallet() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ createWallet() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("wallets").replace(queryParameters: _queryParameters);
+    Uri _uri =
+        getApiBaseUri("wallets").replace(queryParameters: _queryParameters);
 
-    var response = await httpClient.postUri(_uri, data: _wallet.toJson(), options: optionsNetwork);
+    var response = await httpClient.postUri(_uri,
+        data: _wallet.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Wallet.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Wallet> updateWallet(Wallet _wallet) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ updateWallet() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ updateWallet() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("wallets/${_wallet.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("wallets/${_wallet.id}")
+        .replace(queryParameters: _queryParameters);
 
-    var response = await httpClient.putUri(_uri, data: _wallet.toJson(), options: optionsNetwork);
+    var response = await httpClient.putUri(_uri,
+        data: _wallet.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Wallet.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<bool> deleteWallet(Wallet _wallet) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ deleteWallet() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ deleteWallet() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("wallets/${_wallet.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("wallets/${_wallet.id}")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.deleteUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<List<WalletTransaction>> getWalletTransactions(Wallet wallet) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getWalletTransactions() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getWalletTransactions() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
@@ -1020,137 +1183,161 @@ class LaravelApiClient extends GetxService with ApiClient {
       'search': 'wallet_id:${wallet.id}',
       'searchFields': 'wallet_id:=',
     };
-    Uri _uri = getApiBaseUri("wallet_transactions").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("wallet_transactions")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<WalletTransaction>((obj) => WalletTransaction.fromJson(obj)).toList();
+      return response.data['data']
+          .map<WalletTransaction>((obj) => WalletTransaction.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Payment> createPayment(Booking _booking) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ createPayment() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ createPayment() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("payments/cash").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("payments/cash")
+        .replace(queryParameters: _queryParameters);
 
-    var response = await httpClient.postUri(_uri, data: _booking.toJson(), options: optionsNetwork);
+    var response = await httpClient.postUri(_uri,
+        data: _booking.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Payment.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Payment> createWalletPayment(Booking _booking, Wallet _wallet) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ createPayment() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ createPayment() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("payments/wallets/${_wallet.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("payments/wallets/${_wallet.id}")
+        .replace(queryParameters: _queryParameters);
 
-    var response = await httpClient.postUri(_uri, data: _booking.toJson(), options: optionsNetwork);
+    var response = await httpClient.postUri(_uri,
+        data: _booking.toJson(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Payment.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Uri getPayPalUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getPayPalUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getPayPalUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/paypal/express-checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/paypal/express-checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Uri getRazorPayUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getRazorPayUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getRazorPayUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/razorpay/checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/razorpay/checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Uri getStripeUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getStripeUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getStripeUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/stripe/checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/stripe/checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Uri getPayStackUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getPayStackUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getPayStackUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/paystack/checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/paystack/checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Uri getPayMongoUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getPayMongoUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getPayMongoUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/paymongo/checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/paymongo/checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Uri getFlutterWaveUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getFlutterWaveUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getFlutterWaveUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/flutterwave/checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/flutterwave/checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Uri getStripeFPXUrl(Booking _booking) {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getStripeFPXUrl() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getStripeFPXUrl() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
       'booking_id': _booking.id,
     };
-    Uri _uri = getBaseUri("payments/stripe-fpx/checkout").replace(queryParameters: _queryParameters);
+    Uri _uri = getBaseUri("payments/stripe-fpx/checkout")
+        .replace(queryParameters: _queryParameters);
     return _uri;
   }
 
   Future<List<Notification>> getNotifications() async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ getNotifications() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ getNotifications() ]");
     }
     var _queryParameters = {
       'search': 'notifiable_id:${authService.user.value.id}',
@@ -1162,36 +1349,44 @@ class LaravelApiClient extends GetxService with ApiClient {
       'only': 'id;type;data;read_at;created_at',
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("notifications").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("notifications")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Notification>((obj) => Notification.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Notification>((obj) => Notification.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Notification> markAsReadNotification(Notification notification) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ markAsReadNotification() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ markAsReadNotification() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("notifications/${notification.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("notifications/${notification.id}")
+        .replace(queryParameters: _queryParameters);
 
-    var response = await httpClient.putUri(_uri, data: notification.markReadMap(), options: optionsNetwork);
+    var response = await httpClient.putUri(_uri,
+        data: notification.markReadMap(), options: optionsNetwork);
     if (response.data['success'] == true) {
       return Notification.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
-  Future<bool> sendNotification(List<User> users, User from, String type, String text, String id) async {
+  Future<bool> sendNotification(
+      List<User> users, User from, String type, String text, String id) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ sendNotification() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ sendNotification() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
@@ -1203,31 +1398,35 @@ class LaravelApiClient extends GetxService with ApiClient {
       'text': text,
       'id': id,
     };
-    Uri _uri = getApiBaseUri("notifications").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("notifications")
+        .replace(queryParameters: _queryParameters);
 
     Get.log(data.toString());
-    var response = await httpClient.postUri(_uri, data: data, options: optionsNetwork);
+    var response =
+        await httpClient.postUri(_uri, data: data, options: optionsNetwork);
     if (response.data['success'] == true) {
       return true;
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<Notification> removeNotification(Notification notification) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ removeNotification() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ removeNotification() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("notifications/${notification.id}").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("notifications/${notification.id}")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.deleteUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return Notification.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1242,13 +1441,14 @@ class LaravelApiClient extends GetxService with ApiClient {
       'searchJoin': 'and',
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("notifications/count").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("notifications/count")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsNetwork);
     if (response.data['success'] == true) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1257,13 +1457,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'created_at',
       'sortedBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("faq_categories").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("faq_categories")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<FaqCategory>((obj) => FaqCategory.fromJson(obj)).toList();
+      return response.data['data']
+          .map<FaqCategory>((obj) => FaqCategory.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1279,9 +1482,11 @@ class LaravelApiClient extends GetxService with ApiClient {
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<Faq>((obj) => Faq.fromJson(obj)).toList();
+      return response.data['data']
+          .map<Faq>((obj) => Faq.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1292,7 +1497,7 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return Setting.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1302,7 +1507,7 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1310,13 +1515,14 @@ class LaravelApiClient extends GetxService with ApiClient {
     var _queryParameters = {
       'locale': locale,
     };
-    Uri _uri = getApiBaseUri("translations").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("translations")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
       return Map<String, String>.from(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1327,7 +1533,7 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return List.from(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1338,13 +1544,16 @@ class LaravelApiClient extends GetxService with ApiClient {
       'orderBy': 'created_at',
       'sortedBy': 'asc',
     };
-    Uri _uri = getApiBaseUri("custom_pages").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("custom_pages")
+        .replace(queryParameters: _queryParameters);
 
     var response = await httpClient.getUri(_uri, options: optionsCache);
     if (response.data['success'] == true) {
-      return response.data['data'].map<CustomPage>((obj) => CustomPage.fromJson(obj)).toList();
+      return response.data['data']
+          .map<CustomPage>((obj) => CustomPage.fromJson(obj))
+          .toList();
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
@@ -1355,19 +1564,21 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['success'] == true) {
       return CustomPage.fromJson(response.data['data']);
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<String> uploadImage(File file, String field) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ uploadImage() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ uploadImage() ]");
     }
     String fileName = file.path.split('/').last;
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("uploads/store").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("uploads/store")
+        .replace(queryParameters: _queryParameters);
     dio.FormData formData = dio.FormData.fromMap({
       "file": await dio.MultipartFile.fromFile(file.path, filename: fileName),
       "uuid": Uuid().generateV4(),
@@ -1378,41 +1589,45 @@ class LaravelApiClient extends GetxService with ApiClient {
     if (response.data['data'] != false) {
       return response.data['data'];
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<bool> deleteUploaded(String uuid) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ deleteUploaded() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ deleteUploaded() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("uploads/clear").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("uploads/clear")
+        .replace(queryParameters: _queryParameters);
     var response = await httpClient.postUri(_uri, data: {'uuid': uuid});
     print(response.data);
     if (response.data['data'] != false) {
       return true;
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 
   Future<bool> deleteAllUploaded(List<String> uuids) async {
     if (!authService.isAuth) {
-      throw new Exception("You don't have the permission to access to this area!".tr + "[ deleteUploaded() ]");
+      throw Exception(
+          "${"You don't have the permission to access to this area!".tr}[ deleteUploaded() ]");
     }
     var _queryParameters = {
       'api_token': authService.apiToken,
     };
-    Uri _uri = getApiBaseUri("uploads/clear").replace(queryParameters: _queryParameters);
+    Uri _uri = getApiBaseUri("uploads/clear")
+        .replace(queryParameters: _queryParameters);
     var response = await httpClient.postUri(_uri, data: {'uuid': uuids});
     print(response.data);
     if (response.data['data'] != false) {
       return true;
     } else {
-      throw new Exception(response.data['message']);
+      throw Exception(response.data['message']);
     }
   }
 }
