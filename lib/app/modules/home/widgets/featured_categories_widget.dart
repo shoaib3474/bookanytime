@@ -1,10 +1,3 @@
-/*
- * File name: featured_categories_widget.dart
- * Last modified: 2023.01.26 at 18:30:21
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,18 +7,23 @@ import '../controllers/home_controller.dart';
 import 'services_carousel_widget.dart';
 
 class FeaturedCategoriesWidget extends GetWidget<HomeController> {
+  const FeaturedCategoriesWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
+
     return Obx(() {
       if (controller.featured.isEmpty) {
         return CircularLoadingWidget(height: 300);
       }
+
       return Column(
-        children: List.generate(controller.featured.length, (index) {
-          var _category = controller.featured.elementAt(index);
+        children: controller.featured.map((category) {
+          final services = category.eServices ?? [];
           return Column(
             children: [
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Row(
@@ -33,21 +31,20 @@ class FeaturedCategoriesWidget extends GetWidget<HomeController> {
                   children: [
                     Expanded(
                       child: Text(
-                        _category.name!,
-                        style: Get.textTheme.headlineSmall?.copyWith(
+                        category.name!,
+                        style: theme.textTheme.headlineSmall?.copyWith(
                           fontWeight: FontWeight.w700,
-                          color: Get.theme.hintColor,
+                          color: theme.hintColor,
                         ),
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.CATEGORY, arguments: _category);
-                      },
+                      onTap: () =>
+                          Get.toNamed(Routes.CATEGORY, arguments: category),
                       child: Text(
                         "See All".tr,
-                        style: Get.textTheme.bodySmall?.copyWith(
-                          color: Get.theme.colorScheme.secondary,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.secondary,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -55,25 +52,23 @@ class FeaturedCategoriesWidget extends GetWidget<HomeController> {
                   ],
                 ),
               ),
-              Obx(() {
-                if (controller.featured.elementAt(index).eServices!.isEmpty) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 32),
-                    child: Text(
-                      "Mark services as featured to list them on the home screen"
-                          .tr,
-                      textAlign: TextAlign.center,
-                      style: Get.textTheme.bodySmall,
-                    ),
-                  );
-                }
-                return ServicesCarouselWidget(
-                    services: controller.featured.elementAt(index).eServices!);
-              }),
+              const SizedBox(height: 12),
+              if (services.isEmpty)
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                  child: Text(
+                    "Mark services as featured to list them on the home screen"
+                        .tr,
+                    textAlign: TextAlign.center,
+                    style: theme.textTheme.bodySmall,
+                  ),
+                )
+              else
+                ServicesCarouselWidget(services: services),
             ],
           );
-        }),
+        }).toList(),
       );
     });
   }

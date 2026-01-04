@@ -1,9 +1,4 @@
-/*
- * File name: recommended_carousel_widget.dart
- * Last modified: 2023.01.26 at 18:26:27
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
+// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,80 +11,93 @@ import 'salon_main_thumb_widget.dart';
 import 'salon_thumbs_widget.dart';
 
 class RecommendedCarouselWidget extends GetWidget<HomeController> {
+  const RecommendedCarouselWidget({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final theme = Get.theme;
+
+    return SizedBox(
       height: 375,
       child: Obx(() {
-        return ListView.builder(
-            padding: EdgeInsets.only(bottom: 18),
-            primary: false,
-            shrinkWrap: false,
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.salons.length,
-            itemBuilder: (_, index) {
-              var _salon = controller.salons.elementAt(index);
-              return GestureDetector(
-                onTap: () {
-                  Get.toNamed(Routes.SALON, arguments: {'salon': _salon, 'heroTag': 'recommended_carousel'});
-                },
-                child: Container(
-                  width: 280,
-                  margin: EdgeInsetsDirectional.only(end: 20, start: index == 0 ? 20 : 0, top: 20, bottom: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(color: Get.theme.focusColor.withOpacity(0.1), blurRadius: 10, offset: Offset(0, 5)),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SalonMainThumbWidget(salon: _salon),
-                      SizedBox(height: 2),
-                      SalonThumbsWidget(salon: _salon),
-                      Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 15),
-                        height: 110,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Get.theme.primaryColor,
-                          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              _salon.name ?? '',
-                              maxLines: 2,
-                              style: Get.textTheme.bodyMedium?.merge(TextStyle(color: Get.theme.hintColor)),
-                            ),
-                            Text(
-                              Ui.getDistance(_salon.distance!) ?? '',
-                              style: Get.textTheme.bodyLarge,
-                            ),
-                            SizedBox(height: 8),
-                            Wrap(
-                              spacing: 5,
-                              alignment: WrapAlignment.spaceBetween,
-                              crossAxisAlignment: WrapCrossAlignment.center,
-                              direction: Axis.horizontal,
-                              children: [
-                                Wrap(
-                                  children: Ui.getStarsList(_salon.rate),
-                                ),
-                                SalonAvailabilityBadgeWidget(salon: _salon),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+        if (controller.salons.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        return ListView.separated(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+          scrollDirection: Axis.horizontal,
+          itemCount: controller.salons.length,
+          separatorBuilder: (_, __) => const SizedBox(width: 20),
+          itemBuilder: (_, index) {
+            // ignore: no_leading_underscores_for_local_identifiers
+            final _salon = controller.salons[index];
+
+            return GestureDetector(
+              onTap: () {
+                Get.toNamed(Routes.SALON, arguments: {
+                  'salon': _salon,
+                  'heroTag': 'recommended_carousel'
+                });
+              },
+              child: Container(
+                width: 280,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: theme.focusColor.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
-              );
-            });
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SalonMainThumbWidget(salon: _salon),
+                    const SizedBox(height: 4),
+                    SalonThumbsWidget(salon: _salon),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      height: 110,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor,
+                        borderRadius: const BorderRadius.vertical(
+                            bottom: Radius.circular(10)),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(
+                            _salon.name ?? '',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(color: theme.hintColor),
+                          ),
+                          Text(
+                            Ui.getDistance(_salon.distance!) ?? '',
+                            style: theme.textTheme.bodySmall,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(children: Ui.getStarsList(_salon.rate)),
+                              SalonAvailabilityBadgeWidget(salon: _salon),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
       }),
     );
   }

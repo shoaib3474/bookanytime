@@ -1,10 +1,3 @@
-/*
- * File name: welcome_widget.dart
- * Last modified: 2023.01.26 at 18:24:51
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -13,31 +6,52 @@ import '../../global_widgets/search_bar_widget.dart';
 import '../controllers/home_controller.dart';
 
 class WelcomeWidget extends StatelessWidget {
+  WelcomeWidget({super.key});
   final controller = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
+    final userName = Get.find<AuthService>().user.value.name ?? "Guest";
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), color: Get.theme.colorScheme.secondary),
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: theme.colorScheme.secondary,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Wrap(
-              spacing: 3,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text("Welcome,".tr, style: Get.textTheme.bodyLarge),
-                Text(Get.find<AuthService>().user.value.name!, style: Get.textTheme.bodyLarge?.merge(TextStyle(color: Get.theme.primaryColor))),
-                Text('!', style: Get.textTheme.bodyLarge?.merge(TextStyle(color: Get.theme.primaryColor)))
-              ],
+            RichText(
+              text: TextSpan(
+                text: "Welcome, ".tr,
+                style:
+                    theme.textTheme.bodyLarge?.copyWith(color: theme.hintColor),
+                children: [
+                  TextSpan(
+                    text: userName,
+                    style: theme.textTheme.bodyLarge
+                        ?.copyWith(color: theme.primaryColor),
+                  ),
+                  TextSpan(
+                    text: "!",
+                    style: theme.textTheme.bodyLarge
+                        ?.copyWith(color: theme.primaryColor),
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 8),
-            Text("Can I help you something?".tr, style: Get.textTheme.bodySmall?.merge(TextStyle(color: Get.theme.primaryColor))),
-            SizedBox(height: 22),
-            SearchBarWidget()
+            const SizedBox(height: 8),
+            Text(
+              "Can I help you something?".tr,
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.primaryColor),
+            ),
+            const SizedBox(height: 22),
+            SearchBarWidget(),
           ],
         ),
       ),
