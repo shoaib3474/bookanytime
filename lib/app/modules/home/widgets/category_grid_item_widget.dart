@@ -42,19 +42,21 @@ class CategoryGridItemWidget extends StatelessWidget {
             // Category Icon / Image
             SizedBox(
               height: 50,
-              child: category.image!.url.toLowerCase().endsWith('.svg')
-                  ? SvgPicture.network(
-                      category.image!.url,
-                      color: category.color,
-                    )
-                  : CachedNetworkImage(
-                      imageUrl: category.image!.url,
-                      placeholder: (context, url) => Image.asset(
-                          'assets/img/loading.gif',
-                          fit: BoxFit.cover),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error_outline),
-                    ),
+              child: category.image == null
+                  ? const Icon(Icons.error_outline)
+                  : category.image!.url.toLowerCase().endsWith('.svg')
+                      ? SvgPicture.network(
+                          category.image!.url,
+                          color: category.color,
+                        )
+                      : CachedNetworkImage(
+                          imageUrl: category.image!.url,
+                          placeholder: (context, url) => Image.asset(
+                              'assets/img/loading.gif',
+                              fit: BoxFit.cover),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.error_outline),
+                        ),
             ),
             const SizedBox(height: 8),
 

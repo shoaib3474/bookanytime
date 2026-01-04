@@ -47,21 +47,23 @@ class CategoryGridItemWidget extends StatelessWidget {
                 ),
               ),
               child: Center(
-                child: category.image!.url.toLowerCase().endsWith('.svg')
-                    ? SvgPicture.network(
-                        category.image!.url,
-                        color: category.color,
-                        height: 48,
-                      )
-                    : CachedNetworkImage(
-                        imageUrl: category.image!.url,
-                        height: 48,
-                        fit: BoxFit.contain,
-                        placeholder: (context, url) =>
-                            Image.asset('assets/img/loading.gif'),
-                        errorWidget: (_, __, ___) =>
-                            const Icon(Icons.broken_image_outlined),
-                      ),
+                child: category.image == null
+                    ? const Icon(Icons.broken_image_outlined)
+                    : category.image!.url.toLowerCase().endsWith('.svg')
+                        ? SvgPicture.network(
+                            category.image!.url,
+                            color: category.color,
+                            height: 48,
+                          )
+                        : CachedNetworkImage(
+                            imageUrl: category.image!.url,
+                            height: 48,
+                            fit: BoxFit.contain,
+                            placeholder: (context, url) =>
+                                Image.asset('assets/img/loading.gif'),
+                            errorWidget: (_, __, ___) =>
+                                const Icon(Icons.broken_image_outlined),
+                          ),
               ),
             ),
 
