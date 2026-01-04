@@ -1,5 +1,5 @@
 {
-  "laravel_base_url": "Gro.tesliantech.com/public",
+    "laravel_base_url": "https://gro.tesliantech.com/public/",
   "api_path": "api/",
   "received": 1,
   "accepted": 10,
