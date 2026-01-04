@@ -1,10 +1,3 @@
-/*
- * File name: account_view.dart
- * Last modified: 2023.01.26 at 18:24:12
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -18,179 +11,206 @@ import '../controllers/account_controller.dart';
 import '../widgets/account_link_widget.dart';
 
 class AccountView extends GetView<AccountController> {
+  const AccountView({super.key});
+
   @override
   Widget build(BuildContext context) {
-    var _currentUser = Get.find<AuthService>().user;
+    final _currentUser = Get.find<AuthService>().user;
+
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Account".tr,
-            style: Get.textTheme.titleLarge?.merge(TextStyle(color: context.theme.primaryColor)),
-          ),
-          centerTitle: true,
-          backgroundColor: Get.theme.colorScheme.secondary,
-          automaticallyImplyLeading: false,
-          leading: new IconButton(
-            icon: new Icon(Icons.sort, color: Get.theme.primaryColor),
-            onPressed: () => {Scaffold.of(context).openDrawer()},
-          ),
-          elevation: 0,
-          actions: [
-            NotificationsButtonWidget(
-              iconColor: Get.theme.primaryColor,
-              labelColor: Get.theme.hintColor,
-            )
-          ],
+      backgroundColor: context.theme.scaffoldBackgroundColor,
+      appBar: AppBar(
+        elevation: 0,
+        centerTitle: true,
+        backgroundColor: Get.theme.colorScheme.secondary,
+        title: Text(
+          "Account".tr,
+          style: Get.textTheme.titleLarge
+              ?.copyWith(color: context.theme.primaryColor),
         ),
-        body: ListView(
-          primary: true,
-          children: [
-            Obx(() {
-              return Stack(
-                alignment: AlignmentDirectional.bottomCenter,
+        leading: Builder(
+          builder: (context) => IconButton(
+            icon: Icon(Icons.sort, color: context.theme.primaryColor),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+          ),
+        ),
+        actions: [
+          NotificationsButtonWidget(
+            iconColor: context.theme.primaryColor,
+            labelColor: context.theme.hintColor,
+          )
+        ],
+      ),
+      body: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          Obx(() {
+            return Container(
+              padding: const EdgeInsets.only(top: 20, bottom: 60),
+              decoration: BoxDecoration(
+                color: Get.theme.colorScheme.secondary,
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(24),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Get.theme.focusColor.withOpacity(0.15),
+                    blurRadius: 10,
+                    offset: const Offset(0, 5),
+                  ),
+                ],
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    height: 150,
-                    width: Get.width,
-                    decoration: BoxDecoration(
-                      color: Get.theme.colorScheme.secondary,
-                      borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(color: Get.theme.focusColor.withOpacity(0.2), blurRadius: 10, offset: Offset(0, 5)),
-                      ],
-                    ),
-                    margin: EdgeInsets.only(bottom: 50),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20),
-                      child: Column(
+                  Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Column(
                         children: [
+                          const SizedBox(height: 20),
                           Text(
-                            _currentUser.value.name!,
-                            style: Get.textTheme.titleLarge?.merge(TextStyle(color: Get.theme.primaryColor)),
+                            _currentUser.value.name ?? "",
+                            style: Get.textTheme.titleLarge
+                                ?.copyWith(color: context.theme.primaryColor),
                           ),
-                          SizedBox(height: 10),
-                          Text(_currentUser.value.email!, style: Get.textTheme.bodySmall?.merge(TextStyle(color: Get.theme.primaryColor))),
+                          const SizedBox(height: 6),
+                          Text(
+                            _currentUser.value.email ?? "",
+                            style: Get.textTheme.bodySmall
+                                ?.copyWith(color: context.theme.primaryColor),
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-                  Container(
-                    decoration: Ui.getBoxDecoration(
-                      radius: 14,
-                      border: Border.all(width: 5, color: Get.theme.primaryColor),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      child: CachedNetworkImage(
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.cover,
-                        imageUrl: _currentUser.value.avatar.thumb,
-                        placeholder: (context, url) => Image.asset(
-                          'assets/img/loading.gif',
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          height: 100,
+                      Positioned(
+                        bottom: 0,
+                        child: Container(
+                          decoration: Ui.getBoxDecoration(
+                            radius: 50,
+                            border: Border.all(
+                                width: 5, color: context.theme.primaryColor),
+                          ),
+                          child: ClipOval(
+                            child: CachedNetworkImage(
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
+                              imageUrl: _currentUser.value.avatar.thumb,
+                              placeholder: (context, url) => Image.asset(
+                                'assets/img/loading.gif',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error_outline, size: 100),
+                            ),
+                          ),
                         ),
-                        errorWidget: (context, url, error) => Icon(Icons.error_outline),
                       ),
-                    ),
-                  ),
-                ],
-              );
-            }),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: Ui.getBoxDecoration(),
-              child: Column(
-                children: [
-                  AccountLinkWidget(
-                    icon: Icon(Icons.person_outline, color: Get.theme.colorScheme.secondary),
-                    text: Text("Profile".tr),
-                    onTap: (e) {
-                      Get.toNamed(Routes.PROFILE);
-                    },
-                  ),
-                  AccountLinkWidget(
-                    icon: Icon(Icons.assignment_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("My Bookings".tr),
-                    onTap: (e) {
-                      Get.find<RootController>().changePage(1);
-                    },
-                  ),
-                  AccountLinkWidget(
-                    icon: Icon(Icons.notifications_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("Notifications".tr),
-                    onTap: (e) {
-                      Get.toNamed(Routes.NOTIFICATIONS);
-                    },
-                  ),
-                  AccountLinkWidget(
-                    icon: Icon(Icons.chat_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("Messages".tr),
-                    onTap: (e) {
-                      Get.find<RootController>().changePage(2);
-                    },
+                    ],
                   ),
                 ],
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: Ui.getBoxDecoration(),
-              child: Column(
-                children: [
-                  AccountLinkWidget(
-                    icon: Icon(Icons.settings_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("Settings".tr),
-                    onTap: (e) {
-                      Get.toNamed(Routes.SETTINGS);
-                    },
-                  ),
-                  AccountLinkWidget(
-                    icon: Icon(Icons.translate_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("Languages".tr),
-                    onTap: (e) {
-                      Get.toNamed(Routes.SETTINGS_LANGUAGE);
-                    },
-                  ),
-                  AccountLinkWidget(
-                    icon: Icon(Icons.brightness_6_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("Theme Mode".tr),
-                    onTap: (e) {
-                      Get.toNamed(Routes.SETTINGS_THEME_MODE);
-                    },
-                  ),
-                ],
+            );
+          }),
+
+          const SizedBox(height: 20),
+
+          // 🔹 Profile & Bookings Section
+          _buildAccountSection(
+            [
+              AccountLinkWidget(
+                icon: Icon(Icons.person_outline,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Profile".tr),
+                onTap: () => Get.toNamed(Routes.PROFILE),
               ),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: Ui.getBoxDecoration(),
-              child: Column(
-                children: [
-                  AccountLinkWidget(
-                    icon: Icon(Icons.support_outlined, color: Get.theme.colorScheme.secondary),
-                    text: Text("Help & FAQ".tr),
-                    onTap: (e) {
-                      Get.toNamed(Routes.HELP);
-                    },
-                  ),
-                  AccountLinkWidget(
-                    icon: Icon(Icons.logout, color: Get.theme.colorScheme.secondary),
-                    text: Text("Logout".tr),
-                    onTap: (e) async {
-                      await Get.find<AuthService>().removeCurrentUser();
-                      Get.find<RootController>().changePage(0);
-                    },
-                  ),
-                ],
+              AccountLinkWidget(
+                icon: Icon(Icons.assignment_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("My Bookings".tr),
+                onTap: () => Get.find<RootController>().changePage(1),
               ),
-            ),
-          ],
-        ));
+              AccountLinkWidget(
+                icon: Icon(Icons.notifications_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Notifications".tr),
+                onTap: () => Get.toNamed(Routes.NOTIFICATIONS),
+              ),
+              AccountLinkWidget(
+                icon: Icon(Icons.chat_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Messages".tr),
+                onTap: () => Get.find<RootController>().changePage(2),
+              ),
+            ],
+          ),
+
+          // 🔹 Settings Section
+          _buildAccountSection(
+            [
+              AccountLinkWidget(
+                icon: Icon(Icons.settings_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Settings".tr),
+                onTap: () => Get.toNamed(Routes.SETTINGS),
+              ),
+              AccountLinkWidget(
+                icon: Icon(Icons.translate_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Languages".tr),
+                onTap: () => Get.toNamed(Routes.SETTINGS_LANGUAGE),
+              ),
+              AccountLinkWidget(
+                icon: Icon(Icons.brightness_6_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Theme Mode".tr),
+                onTap: () => Get.toNamed(Routes.SETTINGS_THEME_MODE),
+              ),
+            ],
+          ),
+
+          // 🔹 Support & Logout Section
+          _buildAccountSection(
+            [
+              AccountLinkWidget(
+                icon: Icon(Icons.support_outlined,
+                    color: Get.theme.colorScheme.secondary),
+                text: Text("Help & FAQ".tr),
+                onTap: () => Get.toNamed(Routes.HELP),
+              ),
+              AccountLinkWidget(
+                icon:
+                    Icon(Icons.logout, color: Get.theme.colorScheme.secondary),
+                text: Text("Logout".tr),
+                onTap: () async {
+                  await Get.find<AuthService>().removeCurrentUser();
+                  Get.find<RootController>().changePage(0);
+                },
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 30),
+        ],
+      ),
+    );
+  }
+
+  // 🔹 Helper to create a card section
+  Widget _buildAccountSection(List<AccountLinkWidget> links) {
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+      decoration: Ui.getBoxDecoration(),
+      child: Column(
+        children: links
+            .map((widget) => Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: widget,
+                ))
+            .toList(),
+      ),
+    );
   }
 }

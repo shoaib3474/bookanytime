@@ -1,48 +1,42 @@
-/*
- * Copyright (c) 2020 .
- */
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AccountLinkWidget extends StatelessWidget {
   final Icon? icon;
   final Widget? text;
-  final ValueChanged<void>? onTap;
+  final VoidCallback? onTap;
 
   const AccountLinkWidget({
-    Key? key,
+    super.key,
     this.icon,
     this.text,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        onTap!('');
-      },
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        child: Row(
-          children: [
-            icon ?? Container(),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 12),
-              width: 1,
-              height: 24,
-              color: Get.theme.focusColor.withOpacity(0.3),
-            ),
-            Expanded(
-              child: text ?? Container()
-            ),
-            Icon(
-              Icons.arrow_forward_ios,
-              size: 12,
-              color: Get.theme.focusColor,
-            ),
-          ],
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+          child: Row(
+            children: [
+              if (icon != null) icon!,
+              if (icon != null) const SizedBox(width: 12),
+              Expanded(
+                child: text ?? const SizedBox(),
+              ),
+              Icon(
+                Icons.chevron_right,
+                size: 20,
+                // ignore: deprecated_member_use
+                color: Get.theme.focusColor.withOpacity(0.6),
+              ),
+            ],
+          ),
         ),
       ),
     );

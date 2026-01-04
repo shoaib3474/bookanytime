@@ -1,12 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
-/*
- * File name: book_e_service_view.dart
- * Last modified: 2023.02.09 at 15:16:38
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
