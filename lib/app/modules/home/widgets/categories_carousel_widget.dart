@@ -1,11 +1,3 @@
-/*
- * File name: categories_carousel_widget.dart
- * Last modified: 2022.02.17 at 09:54:40
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2022
- */
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,33 +10,33 @@ class CategoriesCarouselWidget extends GetWidget<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Get.theme.primaryColor,
-      padding: EdgeInsets.only(bottom: 15),
-      child: Obx(() {
-        if (controller.categories.isEmpty)
-          return CircularLoadingWidget(height: 300);
-        else
-          return GridView.count(
-            controller: new ScrollController(keepScrollOffset: false),
-            shrinkWrap: true,
-            scrollDirection: Axis.vertical,
-            addAutomaticKeepAlives: false,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-            childAspectRatio: 0.75,
-            primary: false,
-            padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            crossAxisCount:
-                MediaQuery.of(context).orientation == Orientation.portrait
-                    ? 4
-                    : 6,
-            children: controller.categories
-                .map((element) => CategoryGridItemWidget(
-                    category: element, heroTag: "heroTag"))
-                .toList(),
+    return Obx(() {
+      if (controller.categories.isEmpty) {
+        return CircularLoadingWidget(height: 280);
+      }
+
+      return GridView.builder(
+        controller: ScrollController(keepScrollOffset: false),
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        itemCount: controller.categories.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount:
+              MediaQuery.of(context).orientation == Orientation.portrait
+                  ? 4
+                  : 6,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          childAspectRatio: 0.72,
+        ),
+        itemBuilder: (context, index) {
+          return CategoryGridItemWidget(
+            category: controller.categories[index],
+            heroTag: 'category_$index',
           );
-      }),
-    );
+        },
+      );
+    });
   }
 }

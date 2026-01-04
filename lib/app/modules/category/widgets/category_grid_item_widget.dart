@@ -1,9 +1,4 @@
-/*
- * File name: category_grid_item_widget.dart
- * Last modified: 2023.01.26 at 18:26:27
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
+// ignore_for_file: deprecated_member_use
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -18,94 +13,107 @@ class CategoryGridItemWidget extends StatelessWidget {
   final Category category;
   final String heroTag;
 
-  const CategoryGridItemWidget(
-      {Key? key, required this.category, required this.heroTag})
-      : super(key: key);
+  const CategoryGridItemWidget({
+    super.key,
+    required this.category,
+    required this.heroTag,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
+
     return InkWell(
-      splashColor: Get.theme.colorScheme.secondary.withOpacity(0.08),
+      borderRadius: BorderRadius.circular(16),
+      splashColor: theme.colorScheme.primary.withOpacity(0.08),
       onTap: () {
         Get.toNamed(Routes.CATEGORY, arguments: category);
       },
       child: Container(
-        decoration: Ui.getBoxDecoration(),
-        child: Wrap(
-          children: <Widget>[
+        decoration: Ui.getBoxDecoration(
+          radius: 16,
+          border: Border.all(color: theme.dividerColor.withOpacity(0.08)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            /// Image / Icon section
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(vertical: 30),
+              height: 90,
               decoration: BoxDecoration(
-                // ignore: deprecated_member_use
-                color: category.color!.withOpacity(0.15),
-                borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(5), topRight: Radius.circular(5)),
+                color: category.color?.withOpacity(0.12),
+                borderRadius: const BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
-              child: (category.image!.url.toLowerCase().endsWith('.svg')
-                  ? SvgPicture.network(
-                      category.image!.url,
-                      // ignore: deprecated_member_use
-                      color: category.color,
-                      height: 53,
-                    )
-                  : CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      imageUrl: category.image!.url,
-                      placeholder: (context, url) => Image.asset(
-                        'assets/img/loading.gif',
-                        fit: BoxFit.cover,
+              child: Center(
+                child: category.image!.url.toLowerCase().endsWith('.svg')
+                    ? SvgPicture.network(
+                        category.image!.url,
+                        color: category.color,
+                        height: 48,
+                      )
+                    : CachedNetworkImage(
+                        imageUrl: category.image!.url,
+                        height: 48,
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) =>
+                            Image.asset('assets/img/loading.gif'),
+                        errorWidget: (_, __, ___) =>
+                            const Icon(Icons.broken_image_outlined),
                       ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error_outline),
-                    )),
+              ),
             ),
+
+            /// Text + sub categories
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 15),
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
+                children: [
                   Text(
                     category.name ?? '',
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    softWrap: false,
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
                     textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  if ((category.subCategories?.length ?? 0) > 0)
-                    const Divider(height: 25, thickness: 0.5),
-                  Wrap(
-                    spacing: 5,
-                    runSpacing: 5,
-                    children: List.generate(category.subCategories?.length ?? 0,
-                        (index) {
-                      var _category = category.subCategories!.elementAt(index);
-                      return GestureDetector(
-                        onTap: () {
-                          Get.toNamed(Routes.CATEGORY, arguments: _category);
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
-                          decoration: BoxDecoration(
-                              color: Get.theme.primaryColor,
-                              border: Border.all(
-                                // ignore: deprecated_member_use
-                                color: Get.theme.focusColor.withOpacity(0.2),
-                              ),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(20))),
-                          child: Text(_category.name!,
-                              style: Get.textTheme.bodySmall
-                                  ?.merge(const TextStyle(fontSize: 10))),
-                        ),
-                      );
-                    }),
-                  ),
+                  if ((category.subCategories?.length ?? 0) > 0) ...[
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 6,
+                      runSpacing: 6,
+                      alignment: WrapAlignment.center,
+                      children: category.subCategories!
+                          .take(3)
+                          .map((sub) => GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(Routes.CATEGORY, arguments: sub);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: theme.colorScheme.primary
+                                        .withOpacity(0.08),
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    sub.name ?? '',
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ],
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

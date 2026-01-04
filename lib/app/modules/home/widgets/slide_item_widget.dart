@@ -1,9 +1,4 @@
-/*
- * File name: slide_item_widget.dart
- * Last modified: 2023.01.26 at 18:26:28
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2023
- */
+// ignore_for_file: deprecated_member_use
 
 import 'dart:math' as math;
 
@@ -25,8 +20,11 @@ class SlideItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
+
     return Stack(
       children: [
+        /// Background Image
         Transform(
           alignment: Alignment.center,
           transform: Matrix4.rotationY(
@@ -36,41 +34,51 @@ class SlideItemWidget extends StatelessWidget {
             height: 310,
             fit: Ui.getBoxFit(slide.imageFit),
             imageUrl: slide.image.url,
-            placeholder: (context, url) => Image.asset(
-              'assets/img/loading.gif',
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
+            placeholder: (context, url) =>
+                Image.asset('assets/img/loading.gif', fit: BoxFit.cover),
             errorWidget: (context, url, error) =>
                 const Icon(Icons.error_outline),
           ),
         ),
-        Container(
-            alignment: Ui.getAlignmentDirectional(slide.textPosition),
-            width: double.infinity,
-            height: 180,
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: SizedBox(
-              width: Get.width / 3,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment:
-                    Ui.getCrossAxisAlignment(slide.textPosition),
-                children: [
-                  if (slide.text != '')
-                    Flexible(
-                      child: Text(
-                        slide.text,
-                        style: Get.textTheme.bodyMedium!
-                            .merge(TextStyle(color: slide.textColor)),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2,
+
+        /// Text & Button Overlay
+        Positioned(
+          bottom: 0,
+          left: 0,
+          right: 0,
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.black.withOpacity(0.25), // soft overlay for text
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: Ui.getCrossAxisAlignment(slide.textPosition),
+              children: [
+                if (slide.text != '')
+                  Text(
+                    slide.text,
+                    style: Get.textTheme.bodyMedium!.merge(
+                      TextStyle(
+                        color: slide.textColor,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  if (slide.text != '') const SizedBox(height: 8),
-                  if (slide.button != '')
-                    MaterialButton(
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                    textAlign: TextAlign.start,
+                  ),
+                if (slide.text != '') const SizedBox(height: 8),
+                if (slide.button != '')
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: FilledButton(
+                      style: FilledButton.styleFrom(
+                        backgroundColor: slide.buttonColor,
+                        shape: const StadiumBorder(),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 6, horizontal: 16),
+                        textStyle: const TextStyle(
+                            fontSize: 12, fontWeight: FontWeight.w600),
+                      ),
                       onPressed: () {
                         if (slide.salon.hasData) {
                           Get.toNamed(Routes.SALON, arguments: {
@@ -84,24 +92,16 @@ class SlideItemWidget extends StatelessWidget {
                           });
                         }
                       },
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 16),
-                      color: slide.buttonColor,
-                      shape: const StadiumBorder(),
-                      elevation: 0,
                       child: Text(
                         slide.button,
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Get.theme.primaryColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                        ),
+                        style: TextStyle(color: theme.primaryColor),
                       ),
                     ),
-                ],
-              ),
-            )),
+                  ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
