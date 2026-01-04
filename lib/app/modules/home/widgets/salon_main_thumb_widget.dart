@@ -1,49 +1,46 @@
-/*
- * File name: salon_main_thumb_widget.dart
- * Last modified: 2022.02.04 at 18:22:32
- * Author: SmarterVision - https://codecanyon.net/user/smartervision
- * Copyright (c) 2022
- */
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../models/salon_model.dart';
 import 'salon_level_badge_widget.dart';
 
 class SalonMainThumbWidget extends StatelessWidget {
-  const SalonMainThumbWidget({
-    Key? key,
-    required Salon salon,
-  })  : _salon = salon,
-        super(key: key);
+  final Salon salon;
 
-  final Salon _salon;
+  const SalonMainThumbWidget({super.key, required this.salon});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Get.theme;
+
     return Stack(
       children: [
         Hero(
-          tag: 'recommended_carousel' + (_salon.id ?? ''),
+          tag: 'recommended_carousel_${salon.id}',
           child: ClipRRect(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(10)),
             child: CachedNetworkImage(
               height: 150,
               width: double.infinity,
               fit: BoxFit.cover,
-              imageUrl: _salon.firstImageUrl,
-              placeholder: (context, url) => Image.asset(
+              imageUrl: salon.firstImageUrl,
+              placeholder: (_, __) => Image.asset(
                 'assets/img/loading.gif',
                 fit: BoxFit.cover,
                 width: double.infinity,
-                height: 100,
+                height: 150,
               ),
-              errorWidget: (context, url, error) => Icon(Icons.error_outline),
+              errorWidget: (_, __, ___) =>
+                  Icon(Icons.error_outline, color: theme.colorScheme.error),
             ),
           ),
         ),
-        SalonLevelBadgeWidget(salon: _salon),
+        Positioned(
+          top: 8,
+          right: 8,
+          child: SalonLevelBadgeWidget(salon: salon),
+        ),
       ],
     );
   }
