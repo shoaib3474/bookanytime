@@ -20,11 +20,21 @@ class MapsView extends GetView<MapsController> {
         alignment: AlignmentDirectional.topCenter,
         children: [
           Obx(() {
+            if (controller.cameraPosition.value.target.latitude == 0 && 
+                controller.cameraPosition.value.target.longitude == 0) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            }
             return GoogleMap(
-              mapToolbarEnabled: false,
-              zoomControlsEnabled: false,
-              zoomGesturesEnabled: false,
+              mapToolbarEnabled: true,
+              zoomControlsEnabled: true,
+              zoomGesturesEnabled: true,
               myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              scrollGesturesEnabled: true,
+              rotateGesturesEnabled: true,
+              tiltGesturesEnabled: true,
               padding: EdgeInsets.only(top: 35),
               mapType: MapType.normal,
               initialCameraPosition: controller.cameraPosition.value,

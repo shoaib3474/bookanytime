@@ -23,7 +23,10 @@ import '../../../services/settings_service.dart';
 class MapsController extends GetxController {
   final salons = <Salon>[].obs;
   final allMarkers = <Marker>[].obs;
-  final cameraPosition = new CameraPosition(target: LatLng(0, 0)).obs;
+  final cameraPosition = CameraPosition(
+    target: LatLng(37.7749, -122.4194), // Default to San Francisco
+    zoom: 14.0,
+  ).obs;
   final mapController = Rx<GoogleMapController?>(null);
   // LocationPlatformInterface.Location location = new LocationPlatformInterface.Location();
   // LocationPlatformInterface.PermissionStatus permissionGranted = LocationPlatformInterface.PermissionStatus.denied;
@@ -50,12 +53,31 @@ class MapsController extends GetxController {
   }
 
   Future<void> getCurrentPosition() async {
-    cameraPosition.value = CameraPosition(
-      target: currentAddress.getLatLng(),
-      zoom: 14.4746,
-    );
-    Marker marker = await _getMyPositionMarker(currentAddress.getLatLng());
-    allMarkers.add(marker);
+    try {
+      final latLng = currentAddress.getLatLng();
+      if (latLng.latitude != 0.0 && latLng.longitude != 0.0) {
+        cameraPosition.value = CameraPosition(
+          target: latLng,
+          zoom: 14.4746,
+        );
+      } else {
+        // Fallback to default location if address is invalid
+        cameraPosition.value = CameraPosition(
+          target: LatLng(37.7749, -122.4194),
+          zoom: 14.0,
+        );
+      }
+      Marker marker = await _getMyPositionMarker(cameraPosition.value.target);
+      allMarkers.clear();
+      allMarkers.add(marker);
+    } catch (e) {
+      print('Error getting position: $e');
+      // Set fallback position
+      cameraPosition.value = CameraPosition(
+        target: LatLng(37.7749, -122.4194),
+        zoom: 14.0,
+      );
+    }
   }
 
   Future getNearSalons() async {

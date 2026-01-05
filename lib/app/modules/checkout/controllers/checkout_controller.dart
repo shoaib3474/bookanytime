@@ -46,6 +46,7 @@ class CheckoutController extends GetxController {
     try {
       paymentsList.assignAll(await _paymentRepository.getMethods());
     } catch (e) {
+      print('Payment Methods API Error: $e');
       Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     }
   }
@@ -63,7 +64,8 @@ class CheckoutController extends GetxController {
         paymentsList.refresh();
       }
     } catch (e) {
-      Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
+      print('Wallet API Error: $e');
+      // Get.showSnackbar(Ui.ErrorSnackBar(message: e.toString()));
     } finally {
       isLoading.value = false;
     }

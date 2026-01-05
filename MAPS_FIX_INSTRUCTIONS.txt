@@ -1,0 +1,11 @@
+TEMPORARY FIX - Unrestricted API Key:
+
+1. Go to Google Cloud Console
+2. Select the API key: AIzaSyAmpnqwwBl6aIjWEe66WvqJgDIbFs79bNU
+3. Under "Application restrictions" → Select "None" 
+4. Save
+
+WARNING: This removes security but will make maps work immediately.
+For production, always use proper SHA-1 restrictions.
+
+Alternative: Create new API key without restrictions for development.

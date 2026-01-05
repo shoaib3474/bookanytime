@@ -60,17 +60,29 @@ class MapsUtil {
       // 'scale=3&'
       // 'format=png32&'
           'maptype=roadmap&'
-          'markers=icon:${Get.find<GlobalService>().baseUrl}images/marker.png%7Cscale:5%7C'
-          '${latLng.latitude},'
-          '${latLng.longitude}'
-          '&key=${Get.find<SettingsService>().setting.value.googleMapsKey}',
+          'markers=color:red%7C${latLng.latitude},${latLng.longitude}'
+          '&key=${Get.find<SettingsService>().setting.value.googleMapsKey ?? "AIzaSyAmpnqwwBl6aIjWEe66WvqJgDIbFs79bNU"}',
       placeholder: (context, url) => Image.asset(
         'assets/img/loading.gif',
         fit: BoxFit.cover,
         width: double.infinity,
         height: height,
       ),
-      errorWidget: (context, url, error) => Icon(Icons.error_outline),
+      errorWidget: (context, url, error) {
+        print('Map Error: $error');
+        return Container(
+          height: height,
+          width: double.infinity,
+          color: Colors.grey[300],
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.map_outlined, size: 48, color: Colors.grey[600]),
+              Text('Map unavailable', style: TextStyle(color: Colors.grey[600])),
+            ],
+          ),
+        );
+      },
     );
   }
 
